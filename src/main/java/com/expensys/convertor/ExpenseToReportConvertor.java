@@ -21,10 +21,8 @@ public class ExpenseToReportConvertor {
     }
 
     public List<Report> prepareReportListFromExpenseList(List<Expense> expenseList, ReportRequest reportRequest) {
-        HashMap<Month, List<Report>> monthReportMap = new HashMap<>();
-        HashMap<Month, List<ReportInfo>> monthReportInfoMap = new HashMap<>();
+        HashMap<Month, List<ReportInfo>> monthReportInfoMap;
 
-        List<ReportInfo> reportInfoList = new ArrayList<>();
         monthReportInfoMap = prepareReportInfoListFromExpenseListByMonth(expenseList, SpentBy.ALL);
         return prepareReportInfoFromReportInfoByMonth(monthReportInfoMap, reportRequest);
     }

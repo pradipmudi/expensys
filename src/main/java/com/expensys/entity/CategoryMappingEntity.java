@@ -2,11 +2,7 @@ package com.expensys.entity;
 
 import com.expensys.model.enums.Category;
 import jakarta.persistence.*;
-import lombok.Getter;
-import lombok.Setter;
 
-@Getter
-@Setter
 @Entity
 @Table(name = "category_mappings")
 public class CategoryMappingEntity {
@@ -24,4 +20,35 @@ public class CategoryMappingEntity {
     @Column(name = "main_category_type", nullable = false)
     Category categoryType;
 
+    public Long getId() {
+        return id;
+    }
+
+    public void setId(Long id) {
+        this.id = id;
+    }
+
+    public String getSubCategory() {
+        return subCategory;
+    }
+
+    public void setSubCategory(String subCategory) {
+        this.subCategory = subCategory;
+    }
+
+    public Category getMainCategory() {
+        return mainCategory;
+    }
+
+    public void setMainCategory(Category mainCategory) {
+        this.mainCategory = mainCategory;
+    }
+
+    public Category getCategoryType() {
+        return categoryType;
+    }
+
+    public void setCategoryType(Category categoryType) {
+        this.categoryType = categoryType;
+    }
 }

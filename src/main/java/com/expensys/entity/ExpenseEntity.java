@@ -2,14 +2,9 @@ package com.expensys.entity;
 
 import com.expensys.model.enums.Category;
 import jakarta.persistence.*;
-import lombok.Getter;
-import lombok.Setter;
 
 import java.time.LocalDate;
-import java.util.Date;
 
-@Getter
-@Setter
 @Entity
 @Table(name = "expenses")
 public class ExpenseEntity {
@@ -33,4 +28,51 @@ public class ExpenseEntity {
     @Column(name = "spent_by", nullable = false)
     String spentBy;
 
+    public Long getId() {
+        return id;
+    }
+
+    public void setId(Long id) {
+        this.id = id;
+    }
+
+    public LocalDate getDate() {
+        return date;
+    }
+
+    public void setDate(LocalDate date) {
+        this.date = date;
+    }
+
+    public String getItem() {
+        return item;
+    }
+
+    public void setItem(String item) {
+        this.item = item;
+    }
+
+    public Category getCategory() {
+        return category;
+    }
+
+    public void setCategory(Category category) {
+        this.category = category;
+    }
+
+    public Double getSpent() {
+        return spent;
+    }
+
+    public void setSpent(Double spent) {
+        this.spent = spent;
+    }
+
+    public String getSpentBy() {
+        return spentBy;
+    }
+
+    public void setSpentBy(String spentBy) {
+        this.spentBy = spentBy;
+    }
 }
