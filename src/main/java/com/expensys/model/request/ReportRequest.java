@@ -15,4 +15,5 @@ public class ReportRequest {
     Category category;
     SpentBy spentBy;
     Boolean showSpendByUserPercentage;
+    int year;
 }

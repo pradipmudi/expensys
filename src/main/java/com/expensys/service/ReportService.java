@@ -27,10 +27,9 @@ public class ReportService {
     public List<Report> getReport(ReportRequest reportRequest) {
         List<Expense> expenseList;
         if (Month.ALL.equals(reportRequest.getMonth())) {
-            // get current year value
-            int year = Year.now().getValue();
-            expenseList = expenseService.getAllExpensesByYear(year);
+            expenseList = expenseService.getAllExpensesByYear(reportRequest.getYear());
         } else{
+            // this call generally aims to get the specific month data of the current year
             expenseList = expenseService.getExpensesByMonth(reportRequest.getMonth());
         }
         

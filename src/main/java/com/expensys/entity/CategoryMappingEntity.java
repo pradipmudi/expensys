@@ -21,4 +21,7 @@ public class CategoryMappingEntity {
     @Column(name = "main_category", nullable = false)
     Category mainCategory;
 
+    @Column(name = "main_category_type", nullable = false)
+    Category categoryType;
+
 }

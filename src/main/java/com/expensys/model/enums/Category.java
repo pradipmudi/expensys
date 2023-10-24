@@ -12,7 +12,8 @@ public enum Category {
     VEGETABLES_AND_FRUITS("vegetables and fruits"),
     LOSE_OF_MONEY("lose of money"),
     ESSENTIALS("essentials"),
-    EXPENSES("expenses");
+    EXPENSES("expenses"),
+    OTHERS("others");
 
     private String cat;
 

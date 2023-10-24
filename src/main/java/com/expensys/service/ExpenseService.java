@@ -34,14 +34,11 @@ public class ExpenseService {
             Expense expense = new Expense(Month.valueOf(String.valueOf(expenseEntity.getDate().getMonth())), expenseEntity.getItem(), expenseEntity.getCategory(), expenseEntity.getSpent(), expenseEntity.getSpentBy());
             expenseList.add(expense);
         }
-
-
         return expenseList;
     }
 
     List<Expense> getAllExpenses() {
-
-        return null;
+        return prepareExpenseListFromExpenseEntityList(expenseRepository.findAll());
     }
 
     public void saveExpense(LocalDate date, String item, Category category, Double spent, String spentBy) {
