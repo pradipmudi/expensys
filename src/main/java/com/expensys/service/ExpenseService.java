@@ -23,8 +23,11 @@ public class ExpenseService {
         this.expenseRepository = expenseRepository;
     }
 
-    List<Expense> getExpensesByMonth(Month month) {
-        List<ExpenseEntity> expenseEntityList = expenseRepository.findByMonth(month.getMonthValue());
+    public List<Expense> getExpensesByMonth(Month month) {
+        int year = LocalDate.now().getYear(); // You can use the current year or specify a year as needed
+        LocalDate monthStart = LocalDate.of(year, Integer.valueOf(month.getMonthValue()), 1);
+        LocalDate monthEnd = monthStart.plusMonths(1).minusDays(1);
+        List<ExpenseEntity> expenseEntityList = expenseRepository.findByDateBetween(monthStart, monthEnd);
         return prepareExpenseListFromExpenseEntityList(expenseEntityList);
     }
 
@@ -56,7 +59,9 @@ public class ExpenseService {
     }
 
     public List<Expense> getAllExpensesByYear(int year) {
-        List<ExpenseEntity> expenseEntityList = expenseRepository.findByYear(year);
+        LocalDate yearStart = LocalDate.of(year, 1, 1); // January 1st of the specified year
+        LocalDate yearEnd = LocalDate.of(year, 12, 31); // December 31st of the specified year
+        List<ExpenseEntity> expenseEntityList = expenseRepository.findByDateBetween(yearStart, yearEnd);
         return prepareExpenseListFromExpenseEntityList(expenseEntityList);
     }
 }
