@@ -2,6 +2,8 @@ package com.expensys.repository;
 
 import com.expensys.entity.ExpenseEntity;
 import org.springframework.data.jpa.repository.JpaRepository;
+import org.springframework.data.jpa.repository.Query;
+import org.springframework.data.repository.query.Param;
 import org.springframework.web.bind.annotation.RestController;
 
 import java.time.LocalDate;
@@ -15,5 +17,6 @@ public interface ExpenseRepository extends JpaRepository<ExpenseEntity, Long> {
 
 //    List<ExpenseEntity> findByMonthAndYearAndCategory(String month, int year, Category category);
 
-    List<ExpenseEntity> findByDateBetween(LocalDate yearStart, LocalDate yearEnd);
+    @Query("SELECT e FROM ExpenseEntity e WHERE e.date BETWEEN :yearStart AND :yearEnd")
+    List<ExpenseEntity> findByDateBetween(@Param("yearStart") LocalDate yearStart, @Param("yearEnd") LocalDate yearEnd);
 }

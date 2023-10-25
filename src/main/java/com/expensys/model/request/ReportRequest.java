@@ -58,4 +58,15 @@ public class ReportRequest {
     public void setYear(int year) {
         this.year = year;
     }
+
+    @Override
+    public String toString() {
+        return "ReportRequest{" +
+                "month=" + month +
+                ", category=" + category +
+                ", spentBy=" + spentBy +
+                ", showSpendByUserPercentage=" + showSpendByUserPercentage +
+                ", year=" + year +
+                '}';
+    }
 }

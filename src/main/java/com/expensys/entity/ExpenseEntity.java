@@ -1,6 +1,5 @@
 package com.expensys.entity;
 
-import com.expensys.model.enums.Category;
 import jakarta.persistence.*;
 
 import java.time.LocalDate;
@@ -20,7 +19,7 @@ public class ExpenseEntity {
     String item;
 
     @Column(name = "category", nullable = false)
-    Category category;
+    String category;
 
     @Column(name = "spent", nullable = false)
     Double spent;
@@ -52,11 +51,11 @@ public class ExpenseEntity {
         this.item = item;
     }
 
-    public Category getCategory() {
+    public String getCategory() {
         return category;
     }
 
-    public void setCategory(Category category) {
+    public void setCategory(String category) {
         this.category = category;
     }
 
@@ -74,5 +73,17 @@ public class ExpenseEntity {
 
     public void setSpentBy(String spentBy) {
         this.spentBy = spentBy;
+    }
+
+    @Override
+    public String toString() {
+        return "ExpenseEntity{" +
+                "id=" + id +
+                ", date=" + date +
+                ", item='" + item + '\'' +
+                ", category=" + category +
+                ", spent=" + spent +
+                ", spentBy='" + spentBy + '\'' +
+                '}';
     }
 }

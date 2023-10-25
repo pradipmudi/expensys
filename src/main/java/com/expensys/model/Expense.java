@@ -57,4 +57,15 @@ public class Expense {
     public void setSpentBy(String spentBy) {
         this.spentBy = spentBy;
     }
+
+    @Override
+    public String toString() {
+        return "Expense{" +
+                "month=" + month +
+                ", subCategory='" + subCategory + '\'' +
+                ", category=" + category +
+                ", spent=" + spent +
+                ", spentBy='" + spentBy + '\'' +
+                '}';
+    }
 }

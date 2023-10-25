@@ -5,14 +5,16 @@ import com.expensys.model.enums.Category;
 import com.expensys.model.enums.Month;
 import com.expensys.model.request.ReportRequest;
 import com.expensys.model.response.Report;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
-import java.time.Year;
 import java.util.List;
 
 @Service
 public class ReportService {
+    Logger logger = LoggerFactory.getLogger(ReportService.class);
     MainCategoryReportService mainCategoryReportService;
     SubCategoryReportService subCategoryReportService;
     ExpenseService expenseService;
@@ -32,7 +34,8 @@ public class ReportService {
             // this call generally aims to get the specific month data of the current year
             expenseList = expenseService.getExpensesByMonth(reportRequest.getMonth());
         }
-        
+        logger.info("\nexpenseList -> {}\n", expenseList);
+
         return prepareReportFromExpenses(reportRequest, expenseList);
     }
 
