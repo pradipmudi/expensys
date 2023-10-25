@@ -15,10 +15,10 @@ public class CategoryMappingService {
     HashMap<Category, HashSet<Category>> subCategoryToMainCategoryMappingMap;
     @PostConstruct
     void prepareSubCategoryToMainCategoryMappingMap(){
-        categoryMappingRepository.findAll();
+//        categoryMappingRepository.findAll();
     }
     HashMap<Category, HashSet<Category>> getSubCategoryToMainCategoryMappingMap(){
-        return null;
+        return new HashMap<>();
     }
     void addCategoryMapping(CategoryMappingEntity categoryMappingEntity){
         categoryMappingRepository.save(categoryMappingEntity);
