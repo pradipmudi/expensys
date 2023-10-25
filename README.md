@@ -1,3 +1,22 @@
+## Table of Contents
+- [ExpenSys](#expensys)
+- [Intuition](#intuition)
+- [Key Features](#key-features)
+    - [Expense Logging](#expense-logging)
+    - [Monthly Reports](#monthly-reports)
+    - [Categorization](#categorization)
+    - [Subcategories](#subcategories)
+    - [User-Specific Reports](#user-specific-reports)
+    - [User-Centric View](#user-centric-view)
+    - [Subcategory Mapping](#subcategory-mapping)
+    - [Database Integration](#database-integration)
+- [Upcoming features](#upcoming-features)
+    - [User Spend Percentage](#user-spend-percentage)
+    - [Graphical Data Visualization](#graphical-data-visualization)
+    - [Streamline the existing structure](#streamline-the-existing-structure)
+- [How to Use](#how-to-use)
+- [Contribution Guidelines](#contribution-guidelines)
+
 # **ExpenSys**
 
 **ExpenSys** is an efficient **expense tracking** application designed to help you manage your **finances** and maintain a detailed record of your **expenses**. Whether you are an individual looking to **budget** your personal **finances** or a **business owner** tracking **expenses**, **ExpenSys** streamlines the process for you.
