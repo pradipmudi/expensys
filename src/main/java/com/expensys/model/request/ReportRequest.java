@@ -3,12 +3,15 @@ package com.expensys.model.request;
 import com.expensys.model.enums.Category;
 import com.expensys.model.enums.Month;
 import com.expensys.model.enums.SpentBy;
+import jakarta.annotation.Nullable;
 
 public class ReportRequest {
     Month month;
     Category category;
     SpentBy spentBy;
+    @Nullable
     Boolean showSpendByUserPercentage;
+    @Nullable
     int year;
 
     public ReportRequest(Month month, Category category, SpentBy spentBy, Boolean showSpendByUserPercentage, int year) {

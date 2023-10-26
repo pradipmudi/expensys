@@ -1,0 +1,160 @@
+openapi: 3.0.3
+info:
+  title: Expense Management System
+  version: 1.0.0
+servers:
+  - url: http://localhost:8080
+paths:
+  /report:
+    get:
+      summary: Retrieve Report Data for Expenses by Month, YEAR, User, Main Category, and Subcategory
+      parameters:
+        - name: month
+          in: query
+          description: The month for the report (e.g., OCTOBER)
+          required: true
+          schema:
+            type: string
+            enum:
+              - ALL
+              - JANUARY
+              - FEBRUARY
+              - MARCH
+              - APRIL
+              - MAY
+              - JUNE
+              - JULY
+              - AUGUST
+              - SEPTEMBER
+              - OCTOBER
+              - NOVEMBER
+              - DECEMBER
+        - name: category
+          in: query
+          description: The category for the report (e.g., MAIN)
+          required: true
+          schema:
+            type: string
+            enum:
+              - MAIN
+              - SUB
+        - name: spentBy
+          in: query
+          description: The filter for expenses by user (e.g., USER)
+          required: true
+          schema:
+            type: string
+            enum:
+              - USER
+              - ALL
+        - name: showSpendByUserPercentage
+          in: query
+          description: Show spend by user percentage (e.g., false)
+          required: false
+          schema:
+            type: boolean
+            enum:
+              - true
+              - false
+        - name: year
+          in: query
+          description: The year for the report (e.g., 2023)
+          required: false
+          schema:
+            type: integer
+      responses:
+        '200':
+          description: Successful Response
+          content:
+            application/json:
+              example:
+                - month: OCTOBER
+                  totalSpendings: 81678
+                  reportInfo:
+                    - mainCategory: ESSENTIAL
+                      subCategory: essential
+                      spent: 22340
+                      user: John
+                    - mainCategory: EXPENSE
+                      subCategory: expense
+                      spent: 1608
+                      user: John
+                    - mainCategory: ESSENTIAL
+                      subCategory: essential
+                      spent: 4380
+                      user: Alice
+                    - mainCategory: EXPENSE
+                      subCategory: expense
+                      spent: 4781
+                      user: Alice
+                    - mainCategory: ESSENTIAL
+                      subCategory: essential
+                      spent: 37316
+                      user: ALL
+                    - mainCategory: EXPENSE
+                      subCategory: expense
+                      spent: 11211
+                      user: ALL
+                    - mainCategory: EXPENSE
+                      subCategory: expense
+                      spent: 42
+                      user: ALL
+                - month: AUGUST
+                  totalSpendings: 42295
+                  reportInfo:
+                    - mainCategory: ESSENTIAL
+                      subCategory: essential
+                      spent: 210
+                      user: Jane
+                    - mainCategory: ESSENTIAL
+                      subCategory: essential
+                      spent: 22391
+                      user: John
+                    - mainCategory: LOSE_OF_MONEY
+                      subCategory: lose of money
+                      spent: 6050
+                      user: John
+                    - mainCategory: EXPENSE
+                      subCategory: expense
+                      spent: 6643
+                      user: John
+                    - mainCategory: ESSENTIAL
+                      subCategory: essential
+                      spent: 200
+                      user: John
+                    - mainCategory: ESSENTIAL
+                      subCategory: essential
+                      spent: 1800
+                      user: Alice
+                    - mainCategory: EXPENSE
+                      subCategory: expense
+                      spent: 820
+                      user: Alice
+                    - mainCategory: ESSENTIAL
+                      subCategory: essential
+                      spent: 180
+                      user: Alice
+                    - mainCategory: EXPENSE
+                      subCategory: expense
+                      spent: 1120
+                      user: Alice
+                    - mainCategory: ESSENTIAL
+                      subCategory: essential
+                      spent: 2021
+                      user: ALL
+                    - mainCategory: EXPENSE
+                      subCategory: expense
+                      spent: 860
+                      user: ALL
+        '400':
+          description: Bad Request
+          content:
+            application/json:
+              example:
+                - message: "Invalid input parameters. Please check your request."
+        '500':
+          description: Internal Server Error
+          content:
+            application/json:
+              example:
+                - message: "An internal server error occurred. Please try again later."
