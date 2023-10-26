@@ -22,6 +22,7 @@ dependencies {
     testImplementation 'org.springframework.boot:spring-boot-starter-test'
     implementation 'mysql:mysql-connector-java:8.0.27'
     testImplementation 'ch.qos.logback:logback-classic:1.4.11'
+    implementation 'io.swagger.core.v3:swagger-annotations:2.2.14'
 }
 
 tasks.named('test') {
