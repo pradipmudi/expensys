@@ -17,7 +17,7 @@ import java.util.List;
 
 @Service
 public class ExpenseService {
-    Logger logger = LoggerFactory.getLogger(ExpenseService.class);
+    private static final Logger logger = LoggerFactory.getLogger(ExpenseService.class);
     CategoryMappingService categoryMappingService;
     ExpenseRepository expenseRepository;
 
@@ -32,20 +32,19 @@ public class ExpenseService {
         DateTimeFormatter formatter = DateTimeFormatter.ofPattern("yyyy-MM-dd");
 
         // Create the LocalDate for the start of the month
-        LocalDate monthStart = LocalDate.parse(LocalDate.of(year, Integer.valueOf(month.getMonthValue()), 1).format(formatter));
+        LocalDate dateStart = LocalDate.parse(LocalDate.of(year, Integer.valueOf(month.getMonthValue()), 1).format(formatter));
 
         // Create the LocalDate for the end of the month
-        LocalDate monthEnd = LocalDate.parse(monthStart.plusMonths(1).minusDays(1).format(formatter));
-
-        List<ExpenseEntity> expenseEntityList = expenseRepository.findByDateBetween(monthStart, monthEnd);
-        logger.info("expenseEntityList -> {}", expenseEntityList);
+        LocalDate dateEnd = LocalDate.parse(dateStart.plusMonths(1).minusDays(1).format(formatter));
+        List<ExpenseEntity> expenseEntityList = expenseRepository.findByDateBetween(dateStart, dateEnd);
+        logger.info("expenseEntityList.size() -> {} ",expenseEntityList.size());
         return prepareExpenseListFromExpenseEntityList(expenseEntityList);
     }
 
     private List<Expense> prepareExpenseListFromExpenseEntityList(List<ExpenseEntity> expenseEntityList) {
         List<Expense> expenseList = new ArrayList<>();
         for (ExpenseEntity expenseEntity : expenseEntityList) {
-            Expense expense = new Expense(Month.valueOf(String.valueOf(expenseEntity.getDate().getMonth())), expenseEntity.getItem(), Category.valueOf(expenseEntity.getCategory().toUpperCase().replaceAll(" ","_")), expenseEntity.getSpent(), expenseEntity.getSpentBy());
+            Expense expense = new Expense(Month.valueOf(String.valueOf(expenseEntity.getDate().getMonth())), expenseEntity.getItem(), Category.valueOf(expenseEntity.getCategory().toUpperCase().replaceAll("\\s","_")), expenseEntity.getSpent(), expenseEntity.getSpentBy());
             expenseList.add(expense);
         }
         return expenseList;
@@ -73,7 +72,6 @@ public class ExpenseService {
         DateTimeFormatter formatter = DateTimeFormatter.ofPattern("yyyy-MM-dd");
         LocalDate yearStart = LocalDate.parse(LocalDate.of(year, 1, 1).format(formatter)); // January 1st of the specified year
         LocalDate yearEnd = LocalDate.parse(LocalDate.of(year, 12, 31).format(formatter)); // December 31st of the specified year
-
         List<ExpenseEntity> expenseEntityList = expenseRepository.findByDateBetween(yearStart, yearEnd);
         return prepareExpenseListFromExpenseEntityList(expenseEntityList);
     }

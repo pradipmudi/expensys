@@ -26,9 +26,7 @@ public class ExpenseManagementController {
 
     @GetMapping
     public ResponseEntity<List<Report>> getReport(@ModelAttribute ReportRequest reportRequest){
-        logger.info("\n ReportRequest -> {} \n", reportRequest);
         List<Report> reportList = expenseManagementService.getReport(reportRequest);
-        logger.info("\n\nReport -> \n {} \n\n",reportList);
         return new ResponseEntity<>(reportList, HttpStatus.OK);
     }
 

@@ -34,7 +34,6 @@ public class ReportService {
             // this call generally aims to get the specific month data of the current year
             expenseList = expenseService.getExpensesByMonth(reportRequest.getMonth());
         }
-        logger.info("\nexpenseList -> {}\n", expenseList);
 
         return prepareReportFromExpenses(reportRequest, expenseList);
     }

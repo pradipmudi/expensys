@@ -9,10 +9,7 @@ import com.expensys.model.request.ReportRequest;
 import com.expensys.model.response.Report;
 import com.expensys.model.response.ReportInfo;
 
-import java.util.ArrayList;
-import java.util.HashMap;
-import java.util.List;
-import java.util.Map;
+import java.util.*;
 import java.util.stream.Collectors;
 
 public class ExpenseToReportConvertor {
@@ -23,18 +20,18 @@ public class ExpenseToReportConvertor {
     public List<Report> prepareReportListFromExpenseList(List<Expense> expenseList, ReportRequest reportRequest) {
         HashMap<Month, List<ReportInfo>> monthReportInfoMap;
 
-        monthReportInfoMap = prepareReportInfoListFromExpenseListByMonth(expenseList, SpentBy.ALL);
+        monthReportInfoMap = prepareReportInfoListFromExpenseListByMonth(reportRequest, expenseList);
         return prepareReportInfoFromReportInfoByMonth(monthReportInfoMap, reportRequest);
     }
 
-    private HashMap<Month, List<ReportInfo>> prepareReportInfoListFromExpenseListByMonth(List<Expense> expenseList, SpentBy spentBy) {
+    private HashMap<Month, List<ReportInfo>> prepareReportInfoListFromExpenseListByMonth(ReportRequest reportRequest, List<Expense> expenseList) {
         HashMap<Month, List<ReportInfo>> monthReportInfoMap = new HashMap<>();
-
+        SpentBy spentBy = reportRequest.getSpentBy();
         for (Expense expense : expenseList) {
 
             ReportInfo reportInfo = ReportInfo.builder()
                     .mainCategory(expense.getCategory())
-                    .subCategory(expense.getSubCategory())
+                    .subCategory(reportRequest.getCategory().equals(Category.MAIN) ? expense.getCategory().getCat() : expense.getSubCategory())
                     .spent(expense.getSpent())
                     .user(SpentBy.ALL.equals(spentBy) ? spentBy.toString() : expense.getSpentBy())
                     .build();
@@ -56,10 +53,9 @@ public class ExpenseToReportConvertor {
 
     private List<Report> prepareReportInfoFromReportInfoByMonth(HashMap<Month, List<ReportInfo>> monthReportInfoMap, ReportRequest reportRequest) {
         List<Report> reportList = new ArrayList<>();
-        for (Month month : monthReportInfoMap.keySet()) {
-            Report currentReport = new Report();
-            currentReport.setMonth(month);
-            currentReport.setReportInfo(processReportInfoList(monthReportInfoMap.get(month), reportRequest));
+        for (Map.Entry<Month,List<ReportInfo>> monthEntry : monthReportInfoMap.entrySet()) {
+            Month month = monthEntry.getKey();
+            Report currentReport = new Report(month, processReportInfoList(monthReportInfoMap.get(month), reportRequest));
 
             reportList.add(currentReport);
         }
@@ -70,37 +66,39 @@ public class ExpenseToReportConvertor {
         // Filter and collect by non-null subCategory
         List<ReportInfo> filteredList = reportInfoList.stream()
                 .filter(reportInfo -> reportInfo.getSubCategory() != null)
-                .collect(Collectors.toList());
+                .toList();
 
-        if (reportRequest.getSpentBy() == SpentBy.ALL) {
-            // Task 1: Aggregate spent amount by subCategory when SpentBy is "BY_CATEGORY"
-            Map<String, Double> subCategoryToSpent = filteredList.stream()
+        if (SpentBy.ALL.equals(reportRequest.getSpentBy())) {
+            // Aggregate spent amount by subCategory when SpentBy is by "CATEGORY"
+            Map<Category, Double> spentBycategory = filteredList.stream()
                     .collect(Collectors.groupingBy(
-                            ReportInfo::getSubCategory,  // Group by subCategory
+                            ReportInfo::getMainCategory,  // Group by subCategory
                             Collectors.summingDouble(ReportInfo::getSpent))); // Sum the spent amounts
             // Create a new list of ReportInfo objects based on Task 1
-            return subCategoryToSpent.entrySet().stream()
+            return spentBycategory.entrySet().stream()
                     .map(entry -> ReportInfo.builder()
-                            .subCategory(entry.getKey())
+                            .mainCategory(entry.getKey())
+                            .subCategory(entry.getKey().getCat())
+                            .user(SpentBy.ALL.getSpentBy())
                             .spent(entry.getValue())
                             .build())
-                    .collect(Collectors.toList());
-        } else if (reportRequest.getSpentBy() == SpentBy.USER) {
-            // Task 2: Aggregate spent amount by subCategory and spentBy user
-            Map<String, Map<String, Double>> subCategoryAndSpentByUser = filteredList.stream()
+                    .toList();
+        } else if (SpentBy.USER.equals(reportRequest.getSpentBy())) {
+            // Aggregate spent amount by subCategory and spentBy user, ignoring case
+            Map<Category, Map<String, Double>> categoryAndSpentByUser = filteredList.stream()
                     .collect(Collectors.groupingBy(
-                            ReportInfo::getSubCategory,  // Group by subCategory
+                            ReportInfo::getMainCategory,  // Group by subCategory
                             Collectors.groupingBy(
-                                    ReportInfo::getUser, // Group by user
+                                    reportInfo -> reportInfo.getUser().toLowerCase(), // Group by user, ignoring case
                                     Collectors.summingDouble(ReportInfo::getSpent)))); // Sum the spent amounts
 
             // Create a new list of ReportInfo objects based on Task 2, retaining the mainCategory
-            return subCategoryAndSpentByUser.entrySet().stream()
+            return categoryAndSpentByUser.entrySet().stream()
                     .flatMap(entry -> {
-                        String subCategory = entry.getKey();
+                        String category = entry.getKey().getCat();
                         // Extract the mainCategory for the subCategory
                         Category mainCategory = filteredList.stream()
-                                .filter(reportInfo -> subCategory.equals(reportInfo.getSubCategory()))
+                                .filter(reportInfo -> category.equals(reportInfo.getSubCategory()))
                                 .map(ReportInfo::getMainCategory)
                                 .findFirst()
                                 .orElse(null);
@@ -108,13 +106,15 @@ public class ExpenseToReportConvertor {
                         return entry.getValue().entrySet().stream()
                                 .map(userEntry -> ReportInfo.builder()
                                         .mainCategory(mainCategory)
-                                        .subCategory(subCategory)
+                                        .subCategory(category)
                                         .spent(userEntry.getValue())
-                                        .user(userEntry.getKey())
+                                        .user(userEntry.getKey().toUpperCase())
                                         .build());
                     })
-                    .collect(Collectors.toList());
+                    .sorted(Comparator.comparing(ReportInfo::getUser)) // Sort by user field
+                    .toList();
         }
+
 
         return new ArrayList<>(); // Default: return an empty list if the spentBy value is not recognized.
     }

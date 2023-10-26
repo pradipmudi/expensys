@@ -6,7 +6,33 @@ import java.util.List;
 
 public class Report {
     Month month;
+    Double totalSpendings;
     List<ReportInfo> reportInfo;
+
+    public Report(Month month, List<ReportInfo> reportInfo) {
+        this.month = month;
+        this.reportInfo = reportInfo;
+        this.totalSpendings = calculateTotalSpendings();
+    }
+
+    // Calculate the total spendings for the current month
+    private Double calculateTotalSpendings() {
+        Double total = 0.0;
+        for (ReportInfo info : reportInfo) {
+            if (info.getSpent() != null) {
+                total += info.getSpent();
+            }
+        }
+        return total;
+    }
+
+    public Double getTotalSpendings() {
+        return totalSpendings;
+    }
+
+    public void setTotalSpendings(Double totalSpendings) {
+        this.totalSpendings = totalSpendings;
+    }
 
     public Month getMonth() {
         return month;

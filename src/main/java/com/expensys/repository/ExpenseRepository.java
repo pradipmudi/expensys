@@ -13,10 +13,7 @@ import java.util.List;
 public interface ExpenseRepository extends JpaRepository<ExpenseEntity, Long> {
     List<ExpenseEntity> findAll();
 
-//    List<ExpenseEntity> findByMonthAndYear(String month, int year);
+    @Query("SELECT e FROM ExpenseEntity e WHERE e.date BETWEEN :dateStart AND :dateEnd")
+    List<ExpenseEntity> findByDateBetween(@Param("dateStart") LocalDate dateStart, @Param("dateEnd") LocalDate dateEnd);
 
-//    List<ExpenseEntity> findByMonthAndYearAndCategory(String month, int year, Category category);
-
-    @Query("SELECT e FROM ExpenseEntity e WHERE e.date BETWEEN :yearStart AND :yearEnd")
-    List<ExpenseEntity> findByDateBetween(@Param("yearStart") LocalDate yearStart, @Param("yearEnd") LocalDate yearEnd);
 }

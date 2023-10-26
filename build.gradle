@@ -21,6 +21,7 @@ dependencies {
     implementation 'org.springframework.boot:spring-boot-starter-data-jpa:3.1.5'
     testImplementation 'org.springframework.boot:spring-boot-starter-test'
     implementation 'mysql:mysql-connector-java:8.0.27'
+    testImplementation 'ch.qos.logback:logback-classic:1.4.11'
 }
 
 tasks.named('test') {

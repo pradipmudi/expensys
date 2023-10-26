@@ -4,6 +4,7 @@ import com.expensys.entity.CategoryMappingEntity;
 import com.expensys.model.enums.Category;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.jpa.repository.Query;
+import org.springframework.data.repository.query.Param;
 import org.springframework.stereotype.Repository;
 
 import java.util.List;
@@ -13,6 +14,6 @@ public interface CategoryMappingRepository extends JpaRepository<CategoryMapping
     List<CategoryMappingEntity> findAll();
     CategoryMappingEntity save(CategoryMappingEntity categoryMappingEntity);
     @Query("SELECT DISTINCT cme.mainCategory FROM CategoryMappingEntity cme WHERE cme.categoryType = :category")
-    List<Category> findDistinctMainCategoryByMainCategoryType(Category category);
+    List<Category> findDistinctMainCategoryByMainCategoryType(@Param("category") Category category);
 
 }
