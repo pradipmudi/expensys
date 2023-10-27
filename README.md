@@ -12,6 +12,7 @@
     - [Database Integration](#database-integration)
 - [Upcoming features](#upcoming-features)
     - [User Spend Percentage](#user-spend-percentage)
+    - [Google SSO](#google-sso-login)
     - [Graphical Data Visualization](#graphical-data-visualization)
     - [Streamline the existing structure](#streamline-the-existing-structure)
 - [API Contract](#expensys-openapi-contract)
@@ -59,6 +60,9 @@ I found it challenging to track my daily **expenses** using traditional methods 
 ### **User Spend Percentage**
 - As a potential future enhancement, **ExpenSys** aims to calculate and display **user spend percentages**, providing insights into financial distribution.
 
+### Google SSO Login
+- Users will be able to login and interact directly using Google SSO login
+
 ### **Graphical Data Visualization**
 - While not currently implemented, **ExpenSys** has plans to introduce graphical data visualization features, making it even easier to interpret and analyze **expense data**.
 
@@ -66,6 +70,7 @@ I found it challenging to track my daily **expenses** using traditional methods 
 - Work in progress
   - tests
   - graph view for the expenses
+
 
 ## **How to Use**
 
@@ -80,25 +85,11 @@ Your feedback and contributions are valuable to us, and we look forward to enhan
 
 ## **ExpenSys OpenAPI Contract**
 
-The ExpenSys OpenAPI contract defines the interface for interacting with the ExpenSys application through its API. This contract allows developers to understand and integrate with ExpenSys seamlessly. You can access the full OpenAPI specification through the following link:
+The ExpenSys OpenAPI contract defines the interface for interacting with the ExpenSys application through its API. This contract allows developers to understand and integrate with ExpenSys seamlessly. You can access the full OpenAPI specification directly through Swagger UI:
 
-[ExpenSys OpenAPI Specification](https://github.com/pradipmudi/expensys/blob/main/src/main/java/com/expensys/openapi/expensys_openapi.yml)
+[ExpenSys OpenAPI Contract - Swagger UI](https://petstore.swagger.io/?url=https://raw.githubusercontent.com/pradipmudi/expensys/main/src/main/java/com/expensys/openapi/expensys_openapi.yml#/default/get_report)
 
-To conveniently review and interact with the OpenAPI contract, we recommend using the [Swagger Editor](https://editor.swagger.io). Here's how to get started:
-
-1. Click on the [ExpenSys OpenAPI Specification](https://github.com/pradipmudi/expensys/blob/main/src/main/java/com/expensys/openapi/expensys_openapi.yml) link to access the raw OpenAPI YAML file.
-
-2. Copy the URL from your browser's address bar.
-
-3. Visit the [Swagger Editor](https://editor.swagger.io).
-
-4. In the Swagger Editor, click on "File" in the top menu.
-
-5. Select "Import URL" and paste the URL you copied in step 2.
-
-6. Click "Import" to load the ExpenSys OpenAPI contract.
-
-You can now thoroughly review the API documentation, understand the available endpoints, request and response structures, and use it as a reference for integration and development.
+Simply click on the link above to view and interact with the ExpenSys OpenAPI contract in your web browser.
 
 The ExpenSys OpenAPI contract is the foundation for building applications that interact with ExpenSys. If you have any questions or need further assistance, please don't hesitate to reach out. Happy API development!
 
