@@ -11,3 +11,7 @@ spring:
     properties:
       hibernate.transaction.jta.platform: org.hibernate.engine.transaction.jta.platform.internal.NoJtaPlatform
 
+  thymeleaf:
+    prefix: classpath:/templates/
+    suffix: .html
+    cache: false

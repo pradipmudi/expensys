@@ -20,14 +20,14 @@ public class ExpenseToReportConvertor {
     }
 
     public List<Report> prepareReportListFromExpenseList(List<Expense> expenseList, ReportRequest reportRequest) {
-        HashMap<Month, List<ReportInfo>> monthReportInfoMap;
+        Map<Month, List<ReportInfo>> monthReportInfoMap;
 
         monthReportInfoMap = prepareReportInfoListFromExpenseListByMonth(reportRequest, expenseList);
         return prepareReportInfoFromReportInfoByMonth(monthReportInfoMap, reportRequest);
     }
 
-    private HashMap<Month, List<ReportInfo>> prepareReportInfoListFromExpenseListByMonth(ReportRequest reportRequest, List<Expense> expenseList) {
-        HashMap<Month, List<ReportInfo>> monthReportInfoMap = new HashMap<>();
+    private Map<Month, List<ReportInfo>> prepareReportInfoListFromExpenseListByMonth(ReportRequest reportRequest, List<Expense> expenseList) {
+        Map<Month, List<ReportInfo>> monthReportInfoMap = new EnumMap<>(Month.class);
         SpentBy spentBy = reportRequest.getSpentBy();
         for (Expense expense : expenseList) {
 
@@ -54,7 +54,7 @@ public class ExpenseToReportConvertor {
         return monthReportInfoMap;
     }
 
-    private List<Report> prepareReportInfoFromReportInfoByMonth(HashMap<Month, List<ReportInfo>> monthReportInfoMap, ReportRequest reportRequest) {
+    private List<Report> prepareReportInfoFromReportInfoByMonth(Map<Month, List<ReportInfo>> monthReportInfoMap, ReportRequest reportRequest) {
         List<Report> reportList = new ArrayList<>();
 
         for (Map.Entry<Month, List<ReportInfo>> monthEntry : monthReportInfoMap.entrySet()) {
@@ -92,38 +92,44 @@ public class ExpenseToReportConvertor {
                     .sorted(Comparator.comparing(ReportInfo::getSpent).reversed())
                     .toList();
         } else if (SpentBy.USER.equals(reportRequest.getSpentBy())) {
-            // Aggregate spent amount by subCategory and spentBy user, ignoring case
-            Map<Category, Map<String, Double>> categoryAndSpentByUser = filteredList.stream()
+            // Group and sum by category, user, and mainCategory
+            // Group and sum by mainCategory (an enum), user, and subCategory
+            Map<Category, Map<String, Map<String, Double>>> result = filteredList.stream()
                     .collect(Collectors.groupingBy(
-                            ReportInfo::getMainCategory,  // Group by subCategory
+                            ReportInfo::getMainCategory,  // Group by mainCategory
                             Collectors.groupingBy(
-                                    reportInfo -> reportInfo.getUser().toLowerCase(), // Group by user, ignoring case
-                                    Collectors.summingDouble(ReportInfo::getSpent)))); // Sum the spent amounts
+                                    reportInfo -> reportInfo.getUser().toUpperCase(), // Group by user, ignoring case
+                                    Collectors.groupingBy(
+                                            reportInfo -> SUB_TO_MAIN_CATEGORY_MAPPINGS.get(reportInfo.getMainCategory()).toString(), // Group by mainCategory
+                                            Collectors.summingDouble(ReportInfo::getSpent)
+                                    )
+                            )
+                    ));
 
-            // Create a new list of ReportInfo objects based on Task 2, retaining the mainCategory
-            return categoryAndSpentByUser.entrySet().stream()
-                    .flatMap(entry -> {
-                        Category category = entry.getKey();
-                        // Extract the mainCategory for the subCategory
-                        Category mainCategory = filteredList.stream()
-                                .filter(reportInfo -> category.equals(reportInfo.getSubCategory()))
-                                .map(ReportInfo::getMainCategory)
-                                .findFirst()
-                                .orElse(null);
-                        // Create ReportInfo objects for each user and subCategory combination
-                        return entry.getValue().entrySet().stream()
-                                .map(userEntry -> ReportInfo.builder()
-                                        .mainCategory(category)
-                                        .subCategory(SUB_TO_MAIN_CATEGORY_MAPPINGS.get(category).toString())
-                                        .spent(userEntry.getValue())
-                                        .user(userEntry.getKey().toUpperCase())
-                                        .build());
+            // Create a new list of ReportInfo objects based on Task 2
+            return result.entrySet().stream()
+                    .flatMap(mainCategoryMapEntry -> {
+                        Category mainCategory = mainCategoryMapEntry.getKey();
+                        return mainCategoryMapEntry.getValue().entrySet().stream()
+                                .flatMap(userEntry -> {
+                                    String user = userEntry.getKey();
+                                    return userEntry.getValue().entrySet().stream()
+                                            .map(subCategoryEntry -> {
+                                                String subCategory = subCategoryEntry.getKey();
+                                                double spent = subCategoryEntry.getValue();
+                                                return ReportInfo.builder()
+                                                        .mainCategory(mainCategory)
+                                                        .subCategory(subCategory)
+                                                        .user(user)
+                                                        .spent(spent)
+                                                        .build();
+                                            });
+                                });
                     })
-                    .sorted(Comparator.comparing(ReportInfo::getUser)) // Sort by user field
-                    .sorted(Comparator.comparing(ReportInfo::getSpent).reversed())
+                    .sorted(Comparator.comparing(ReportInfo::getUser).thenComparing(ReportInfo::getSpent).reversed())
                     .toList();
-        }
 
+        }
 
         return new ArrayList<>(); // Default: return an empty list if the spentBy value is not recognized.
     }
