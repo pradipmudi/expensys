@@ -5,61 +5,94 @@
     <style>
         body {
             font-family: Arial, sans-serif;
-            background-color: #f4f4f4;
+            background-color: #f7f7f7;
             margin: 0;
             padding: 0;
             display: flex;
             justify-content: center;
             align-items: center;
-            height: 100vh;
+            min-height: 100vh;
         }
 
         .container {
             background-color: #fff;
-            padding: 20px;
-            border-radius: 5px;
-            box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1);
-            max-width: 400px;
-            width: 100%;
+            padding: 30px;
+            border-radius: 10px;
+            box-shadow: 0 5px 15px rgba(0, 0, 0, 0.2);
+            width: 90%;
+            max-width: 500px;
+            text-align: center;
         }
 
         h1 {
-            text-align: center;
-            color: #333;
+            color: #3498db;
+            font-size: 28px;
+            margin-bottom: 20px;
         }
 
         form {
-            display: flex;
-            flex-direction: column;
+            text-align: left;
         }
 
         label {
             font-weight: bold;
             margin-top: 10px;
+            display: block;
+            font-size: 18px;
         }
 
         input[type="date"],
         select,
         input[type="text"] {
             width: 100%;
-            padding: 10px;
+            padding: 12px;
             margin: 5px 0;
             border: 1px solid #ccc;
-            border-radius: 3px;
+            border-radius: 5px;
+            font-size: 16px;
+            transition: border-color 0.3s;
+        }
+
+        input[type="date"]:focus,
+        select:focus,
+        input[type="text"]:focus {
+            border-color: #3498db;
         }
 
         input[type="submit"] {
             background-color: #3498db;
             color: #fff;
             border: none;
-            padding: 10px;
-            border-radius: 3px;
+            padding: 14px 20px;
+            border-radius: 5px;
             cursor: pointer;
+            font-size: 18px;
             transition: background-color 0.3s;
         }
 
         input[type="submit"]:hover {
             background-color: #2980b9;
+        }
+
+        .select-wrapper {
+            position: relative;
+            display: inline-block;
+        }
+
+        select {
+            appearance: none;
+            -webkit-appearance: none;
+            -moz-appearance: none;
+            width: 100%;
+            cursor: pointer;
+        }
+
+        .select-icon {
+            position: absolute;
+            top: 50%;
+            right: 15px;
+            transform: translateY(-50%);
+            pointer-events: none;
         }
     </style>
 </head>
@@ -74,25 +107,28 @@
         <input type="text" id="item" name="item" required>
 
         <label for="subCategory">Category:</label>
-        <select id="subCategory" name="subCategory" required>
-            <option>--</option>
-            <option value="GROCERIES">Groceries</option>
-            <option value="VEGETABLES_FRUITS_DAIRY_AND_MEAT">Vegetables, Fruits, Dairy and Meat</option>
-            <option value="MEDICAL">Medical</option>
-            <option value="OUTSIDE_FOOD">Outside Food</option>
-            <option value="LOSE_OF_MONEY">Lose of Money</option>
-            <option value="SALON_AND_COSMETICS">Salon and Beauty Products</option>
-            <option value="TRANSPORT">Transport</option>
-            <option value="SHOPPING">Shopping</option>
-            <option value="ENTERTAINMENT">Entertainment</option>
-            <option value="RENT_AND_OTHER_BILLS">Rent and Other Bills</option>
-            <option value="OTHERS">Others</option>
-        </select>
+        <div class="select-wrapper">
+            <select id="subCategory" name="subCategory" required>
+                <option value="" disabled selected>-- Select Category --</option>
+                <option value="GROCERIES">Groceries</option>
+                <option value="VEGETABLES_FRUITS_DAIRY_AND_MEAT">Vegetables, Fruits, Dairy and Meat</option>
+                <option value="MEDICAL">Medical</option>
+                <option value="OUTSIDE_FOOD">Outside Food</option>
+                <option value="LOSE_OF_MONEY">Loss of Money</option>
+                <option value="SALON_AND_COSMETICS">Salon and Beauty Products</option>
+                <option value="TRANSPORT">Transport</option>
+                <option value="SHOPPING">Shopping</option>
+                <option value="ENTERTAINMENT">Entertainment</option>
+                <option value="RENT_AND_OTHER_BILLS">Rent and Other Bills</option>
+                <option value="OTHERS">Others</option>
+            </select>
+            <div class="select-icon">&#9660;</div>
+        </div>
 
-        <label for="spent">Spent(Total spent amount):</label>
+        <label for="spent">Spent (Total spent amount):</label>
         <input type="text" id="spent" name="spent" required>
 
-        <label for="user">User(Specify the person name):</label>
+        <label for="user">User (Specify the person's name):</label>
         <input type="text" id="user" name="user" required>
 
         <input type="submit" value="Submit">
