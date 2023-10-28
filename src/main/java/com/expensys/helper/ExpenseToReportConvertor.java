@@ -1,4 +1,4 @@
-package com.expensys.convertor;
+package com.expensys.helper;
 
 
 import com.expensys.model.Expense;
@@ -11,6 +11,8 @@ import com.expensys.model.response.ReportInfo;
 
 import java.util.*;
 import java.util.stream.Collectors;
+
+import static com.expensys.constant.CategoryMappings.SUB_TO_MAIN_CATEGORY_MAPPINGS;
 
 public class ExpenseToReportConvertor {
     private ExpenseToReportConvertor() {
@@ -31,7 +33,8 @@ public class ExpenseToReportConvertor {
 
             ReportInfo reportInfo = ReportInfo.builder()
                     .mainCategory(expense.getCategory())
-                    .subCategory(reportRequest.getCategory().equals(Category.MAIN) ? expense.getCategory().getCat() : expense.getSubCategory())
+//                    .subCategory(reportRequest.getCategory().equals(Category.MAIN) ? expense.getCategory().getCat() : expense.getSubCategory())
+                    .subCategory(SUB_TO_MAIN_CATEGORY_MAPPINGS.get(expense.getCategory()).toString())
                     .spent(expense.getSpent())
                     .user(SpentBy.ALL.equals(spentBy) ? spentBy.toString() : expense.getSpentBy())
                     .build();
@@ -53,12 +56,16 @@ public class ExpenseToReportConvertor {
 
     private List<Report> prepareReportInfoFromReportInfoByMonth(HashMap<Month, List<ReportInfo>> monthReportInfoMap, ReportRequest reportRequest) {
         List<Report> reportList = new ArrayList<>();
-        for (Map.Entry<Month,List<ReportInfo>> monthEntry : monthReportInfoMap.entrySet()) {
+
+        for (Map.Entry<Month, List<ReportInfo>> monthEntry : monthReportInfoMap.entrySet()) {
             Month month = monthEntry.getKey();
             Report currentReport = new Report(month, processReportInfoList(monthReportInfoMap.get(month), reportRequest));
-
             reportList.add(currentReport);
         }
+
+        // Sort the reportList based on the month's integer values in descending order
+        Collections.sort(reportList, (r1, r2) -> Integer.compare(Integer.valueOf(r2.getMonth().getMonthValue()), Integer.valueOf(r1.getMonth().getMonthValue())));
+
         return reportList;
     }
 
@@ -78,10 +85,11 @@ public class ExpenseToReportConvertor {
             return spentBycategory.entrySet().stream()
                     .map(entry -> ReportInfo.builder()
                             .mainCategory(entry.getKey())
-                            .subCategory(entry.getKey().getCat())
+                            .subCategory(SUB_TO_MAIN_CATEGORY_MAPPINGS.get(entry.getKey()).toString())
                             .user(SpentBy.ALL.getSpentBy())
                             .spent(entry.getValue())
                             .build())
+                    .sorted(Comparator.comparing(ReportInfo::getSpent).reversed())
                     .toList();
         } else if (SpentBy.USER.equals(reportRequest.getSpentBy())) {
             // Aggregate spent amount by subCategory and spentBy user, ignoring case
@@ -95,7 +103,7 @@ public class ExpenseToReportConvertor {
             // Create a new list of ReportInfo objects based on Task 2, retaining the mainCategory
             return categoryAndSpentByUser.entrySet().stream()
                     .flatMap(entry -> {
-                        String category = entry.getKey().getCat();
+                        Category category = entry.getKey();
                         // Extract the mainCategory for the subCategory
                         Category mainCategory = filteredList.stream()
                                 .filter(reportInfo -> category.equals(reportInfo.getSubCategory()))
@@ -105,13 +113,14 @@ public class ExpenseToReportConvertor {
                         // Create ReportInfo objects for each user and subCategory combination
                         return entry.getValue().entrySet().stream()
                                 .map(userEntry -> ReportInfo.builder()
-                                        .mainCategory(mainCategory)
-                                        .subCategory(category)
+                                        .mainCategory(category)
+                                        .subCategory(SUB_TO_MAIN_CATEGORY_MAPPINGS.get(category).toString())
                                         .spent(userEntry.getValue())
                                         .user(userEntry.getKey().toUpperCase())
                                         .build());
                     })
                     .sorted(Comparator.comparing(ReportInfo::getUser)) // Sort by user field
+                    .sorted(Comparator.comparing(ReportInfo::getSpent).reversed())
                     .toList();
         }
 

@@ -1,6 +1,6 @@
 package com.expensys.service;
 
-import com.expensys.convertor.ExpenseToReportConvertor;
+import com.expensys.helper.ExpenseToReportConvertor;
 import com.expensys.model.Expense;
 import com.expensys.model.request.ReportRequest;
 import com.expensys.model.response.Report;
@@ -26,6 +26,8 @@ public class SubCategoryReportService implements ICategoryReportService{
 
     @Override
     public List<Report> prepareReport(ReportRequest reportRequest, List<Expense> expenseList) {
+//        for (Expense expense : expenseList)
+//            logger.info("expense -> {} ", expense);
         expenseList = expenseList.stream().filter(expense -> SUB_CATEGORIES.contains(expense.getCategory())).toList();
         return ExpenseToReportConvertor.getInstance().prepareReportListFromExpenseList(expenseList, reportRequest);
     }

@@ -1,34 +1,30 @@
 package com.expensys.controller;
 
-import com.expensys.model.request.ReportRequest;
-import com.expensys.model.response.Report;
+import com.expensys.model.request.NewExpense;
 import com.expensys.service.main.ExpenseManagementService;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.ModelAttribute;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RestController;
-
-import java.util.List;
+import org.springframework.web.bind.annotation.*;
 
 @RestController
-@RequestMapping("/report")
+@RequestMapping("/expense")
 public class ExpenseManagementController {
     Logger logger = LoggerFactory.getLogger(ExpenseManagementController.class);
     private final ExpenseManagementService expenseManagementService;
 
+    @Autowired
     public ExpenseManagementController(ExpenseManagementService expenseManagementService) {
         this.expenseManagementService = expenseManagementService;
     }
 
-    @GetMapping
-    public ResponseEntity<List<Report>> getReport(@ModelAttribute ReportRequest reportRequest){
-        List<Report> reportList = expenseManagementService.getReport(reportRequest);
-        return new ResponseEntity<>(reportList, HttpStatus.OK);
+    @CrossOrigin
+    @PostMapping("/save")
+    public ResponseEntity<HttpStatus> saveExpense(@RequestBody NewExpense newExpense){
+        logger.info("newExpense -> {}",newExpense);
+//        expenseManagementService.addExpense(newExpense);
+        return new ResponseEntity<>(expenseManagementService.addExpense(newExpense) ? HttpStatus.OK : HttpStatus.INTERNAL_SERVER_ERROR);
     }
-
-
 }

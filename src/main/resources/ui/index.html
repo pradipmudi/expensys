@@ -1,0 +1,243 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <meta charset="UTF-8">
+    <title>Monthly Spending Report</title>
+    <link rel="stylesheet" href="styles.css">
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            margin: 0;
+            padding: 0;
+            background-color: #f2f2f2;
+        }
+
+        header {
+            background-color: #333;
+            color: white;
+            text-align: center;
+            padding: 20px 0;
+        }
+
+        h1 {
+            font-size: 24px;
+        }
+
+        section#filter-options {
+            display: flex;
+            justify-content: center;
+            background-color: #fff;
+            padding: 10px 0;
+            box-shadow: 0 0 5px rgba(0, 0, 0, 0.1);
+        }
+
+        label {
+            font-weight: bold;
+        }
+
+        select {
+            font-size: 16px;
+            padding: 10px;
+            margin: 0 10px;
+            border: 1px solid #ccc;
+            border-radius: 5px;
+        }
+
+        section#monthly-report {
+            margin: 20px;
+        }
+
+        .report-card {
+            background-color: #fff;
+            border-radius: 8px;
+            box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+            margin: 20px;
+            padding: 20px;
+        }
+
+        h2 {
+            font-size: 20px;
+            margin: 0;
+            color: #333;
+        }
+
+        .total-spending {
+            margin: 10px 0;
+            font-weight: bold;
+            color: #555;
+        }
+
+        table {
+            width: 100%;
+            border-collapse: collapse;
+        }
+
+        th, td {
+            padding: 10px;
+            text-align: left;
+        }
+
+        th {
+            background-color: #f2f2f2;
+        }
+
+        tr:nth-child(even) {
+            background-color: #f2f2f2;
+        }
+
+        canvas {
+            width: 100%;
+            max-width: 400px;
+            margin: 20px auto;
+        }
+
+        @media (max-width: 768px) {
+            .report-card {
+                margin: 10px;
+            }
+        }
+    </style>
+</head>
+<body>
+<header>
+    <h1>Monthly Spending Report</h1>
+</header>
+
+<section id="filter-options">
+    <label for="month-filter">Select Month:</label>
+    <select id="month-filter">
+        <option value="ALL">ALL</option>
+        <option value="JANUARY">JANUARY</option>
+        <option value="FEBRUARY">FEBRUARY</option>
+        <option value="MARCH">MARCH</option>
+        <option value="APRIL">APRIL</option>
+        <option value="MAY">MAY</option>
+        <option value="JUNE">JUNE</option>
+        <option value="JULY">JULY</option>
+        <option value="AUGUST">AUGUST</option>
+        <option value="SEPTEMBER">SEPTEMBER</option>
+        <option value="OCTOBER">OCTOBER</option>
+        <option value="NOVEMBER">NOVEMBER</option>
+        <option value="DECEMBER">DECEMBER</option>
+    </select>
+
+    <label for="category-filter">Select Category:</label>
+    <select id="category-filter">
+        <option value="MAIN">Main</option>
+        <option value="SUB">Sub</option>
+    </select>
+
+    <label for="spent-by-filter">Spent By:</label>
+    <select id="spent-by-filter">
+        <option value="USER">User</option>
+        <option value="ALL">All</option>
+    </select>
+</section>
+
+<section id="monthly-report">
+    <!-- Report content will be dynamically updated -->
+</section>
+
+<script>
+    const monthFilter = document.getElementById("month-filter");
+    const categoryFilter = document.getElementById("category-filter");
+    const spentByFilter = document.getElementById("spent-by-filter");
+    const monthlyReport = document.getElementById("monthly-report");
+
+    // Function to fetch and update the data based on filters
+    async function updateReport() {
+        try {
+            const selectedMonth = monthFilter.value;
+            const selectedCategory = categoryFilter.value;
+            const selectedSpentBy = spentByFilter.value;
+
+            // Make an API request based on selected filters
+            const apiUrl = `http://localhost:8080/report?month=${selectedMonth}&category=${selectedCategory}&spentBy=${selectedSpentBy}`;
+            const response = await fetch(apiUrl);
+
+            if (!response.ok) {
+                throw new Error(`API request failed with status: ${response.status}`);
+            }
+
+            const data = await response.json();
+
+            // Clear previous data
+            monthlyReport.innerHTML = "";
+
+            if (selectedMonth === "ALL") {
+                // Show data for all months
+                data.forEach(monthData => {
+                    const reportCard = document.createElement("div");
+                    reportCard.className = "report-card";
+                    reportCard.innerHTML = `<h2>${monthData.month}</h2>
+                                        <div class="total-spending">
+                                            <p>Total Spendings: ₹${monthData.totalSpendings}</p>
+                                        </div>
+                                        <table>
+                                            <thead>
+                                                <tr>
+                                                    <th>Category</th>
+                                                    ${selectedCategory === "MAIN" ? "" : "<th>Main Category</th>"}
+                                                    <th>Spent</th>
+                                                    ${selectedSpentBy === "USER" ? "<th>User</th>" : ""}
+                                                </tr>
+                                            </thead>
+                                            <tbody>
+                                                ${monthData.reportInfo.map(info => `
+                                                    <tr>
+                                                        <td>${info.mainCategory}</td>
+                                                        ${selectedCategory === "MAIN" ? "" : `<td>${info.subCategory}</td>`}
+                                                        <td>₹${info.spent}</td>
+                                                        ${selectedSpentBy === "USER" ? `<td>${info.user}</td>` : ""}
+                                                    </tr>
+                                                `).join('')}
+                                            </tbody>
+                                        </table>`;
+                    monthlyReport.appendChild(reportCard);
+                });
+            } else {
+                // Show data for the selected month
+                const reportCard = document.createElement("div");
+                reportCard.className = "report-card";
+                reportCard.innerHTML = `<h2>${selectedMonth}</h2>
+                                        <div class="total-spending">
+                                            <p>Total Spendings: ₹${data[0].totalSpendings}</p>
+                                        </div>
+                                        <table>
+                                            <thead>
+                                                <tr>
+                                                    <th>Category</th>
+                                                    ${selectedCategory === "MAIN" ? "" : "<th>Main Category</th>"}
+                                                    <th>Spent</th>
+                                                    ${selectedSpentBy === "USER" ? "<th>User</th>" : ""}
+                                                </tr>
+                                            </thead>
+                                            <tbody>
+                                                ${data[0].reportInfo.map(info => `
+                                                    <tr>
+                                                        <td>${info.mainCategory}</td>
+                                                        ${selectedCategory === "MAIN" ? "" : `<td>${info.subCategory}</td>`}
+                                                        <td>₹${info.spent}</td>
+                                                        ${selectedSpentBy === "USER" ? `<td>${info.user}</td>` : ""}
+                                                    </tr>
+                                                `).join('')}
+                                            </tbody>
+                                        </table>`;
+                monthlyReport.appendChild(reportCard);
+            }
+        } catch (error) {
+            console.error(error);
+        }
+    }
+
+    // Listen for changes in filters and update the report
+    monthFilter.addEventListener("change", updateReport);
+    categoryFilter.addEventListener("change", updateReport);
+    spentByFilter.addEventListener("change", updateReport);
+
+    // Initial update
+    updateReport();
+</script>
+</body>
+</html>

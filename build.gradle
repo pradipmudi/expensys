@@ -23,6 +23,7 @@ dependencies {
     implementation 'mysql:mysql-connector-java:8.0.27'
     testImplementation 'ch.qos.logback:logback-classic:1.4.11'
     implementation 'io.swagger.core.v3:swagger-annotations:2.2.14'
+    implementation 'org.apache.commons:commons-text:1.10.0'
 }
 
 tasks.named('test') {

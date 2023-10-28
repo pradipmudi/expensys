@@ -4,6 +4,8 @@ import com.expensys.entity.ExpenseEntity;
 import com.expensys.model.Expense;
 import com.expensys.model.enums.Category;
 import com.expensys.model.enums.Month;
+import com.expensys.model.request.NewExpense;
+import com.expensys.model.request.ReportRequest;
 import com.expensys.repository.ExpenseRepository;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -14,6 +16,8 @@ import java.time.LocalDate;
 import java.time.format.DateTimeFormatter;
 import java.util.ArrayList;
 import java.util.List;
+
+import static com.expensys.constant.CategoryMappings.SUB_TO_MAIN_CATEGORY_MAPPINGS;
 
 @Service
 public class ExpenseService {
@@ -27,7 +31,7 @@ public class ExpenseService {
         this.expenseRepository = expenseRepository;
     }
 
-    public List<Expense> getExpensesByMonth(Month month) {
+    public List<Expense> getExpensesByMonth(Month month, ReportRequest reportRequest) {
         int year = LocalDate.now().getYear(); // You can use the current year or specify a year as needed
         DateTimeFormatter formatter = DateTimeFormatter.ofPattern("yyyy-MM-dd");
 
@@ -37,42 +41,43 @@ public class ExpenseService {
         // Create the LocalDate for the end of the month
         LocalDate dateEnd = LocalDate.parse(dateStart.plusMonths(1).minusDays(1).format(formatter));
         List<ExpenseEntity> expenseEntityList = expenseRepository.findByDateBetween(dateStart, dateEnd);
-        logger.info("expenseEntityList.size() -> {} ",expenseEntityList.size());
-        return prepareExpenseListFromExpenseEntityList(expenseEntityList);
+        return prepareExpenseListFromExpenseEntityList(expenseEntityList, reportRequest);
     }
 
-    private List<Expense> prepareExpenseListFromExpenseEntityList(List<ExpenseEntity> expenseEntityList) {
+    private List<Expense> prepareExpenseListFromExpenseEntityList(List<ExpenseEntity> expenseEntityList, ReportRequest reportRequest) {
         List<Expense> expenseList = new ArrayList<>();
         for (ExpenseEntity expenseEntity : expenseEntityList) {
-            Expense expense = new Expense(Month.valueOf(String.valueOf(expenseEntity.getDate().getMonth())), expenseEntity.getItem(), Category.valueOf(expenseEntity.getCategory().toUpperCase().replaceAll("\\s","_")), expenseEntity.getSpent(), expenseEntity.getSpentBy());
+            Category expenseCategory = Category.valueOf(expenseEntity.getCategory().toUpperCase().replaceAll("\\s", "_"));
+            Category category = Category.MAIN.equals(reportRequest.getCategory()) ? SUB_TO_MAIN_CATEGORY_MAPPINGS.get(expenseCategory) : expenseCategory;
+            Expense expense = new Expense(Month.valueOf(String.valueOf(expenseEntity.getDate().getMonth())), expenseEntity.getItem(), category, expenseEntity.getSpent(), expenseEntity.getSpentBy());
             expenseList.add(expense);
         }
         return expenseList;
     }
 
     List<Expense> getAllExpenses() {
-        return prepareExpenseListFromExpenseEntityList(expenseRepository.findAll());
+        return prepareExpenseListFromExpenseEntityList(expenseRepository.findAll(), null);
     }
 
-    public void saveExpense(LocalDate date, String item, Category category, Double spent, String spentBy) {
-        expenseRepository.save(prepareExpenseEntity(date, item, category, spent, spentBy));
+    public void saveExpense(NewExpense newExpense) {
+        expenseRepository.save(prepareExpenseEntity(newExpense));
     }
 
-    private ExpenseEntity prepareExpenseEntity(LocalDate date, String item, Category category, Double spent, String spentBy) {
+    private ExpenseEntity prepareExpenseEntity(NewExpense newExpense) {
         ExpenseEntity expenseEntity = new ExpenseEntity();
-        expenseEntity.setDate(date);
-        expenseEntity.setItem(item);
-        expenseEntity.setCategory(category.getCat());
-        expenseEntity.setSpent(spent);
-        expenseEntity.setSpentBy(spentBy);
+        expenseEntity.setDate(newExpense.getDate());
+        expenseEntity.setItem(newExpense.getItem());
+        expenseEntity.setCategory(newExpense.getCategory().toString());
+        expenseEntity.setSpent(newExpense.getSpent());
+        expenseEntity.setSpentBy(newExpense.getUser());
         return expenseEntity;
     }
 
-    public List<Expense> getAllExpensesByYear(int year) {
+    public List<Expense> getAllExpensesByYear(int year, ReportRequest reportRequest) {
         DateTimeFormatter formatter = DateTimeFormatter.ofPattern("yyyy-MM-dd");
         LocalDate yearStart = LocalDate.parse(LocalDate.of(year, 1, 1).format(formatter)); // January 1st of the specified year
         LocalDate yearEnd = LocalDate.parse(LocalDate.of(year, 12, 31).format(formatter)); // December 31st of the specified year
         List<ExpenseEntity> expenseEntityList = expenseRepository.findByDateBetween(yearStart, yearEnd);
-        return prepareExpenseListFromExpenseEntityList(expenseEntityList);
+        return prepareExpenseListFromExpenseEntityList(expenseEntityList, reportRequest);
     }
 }
