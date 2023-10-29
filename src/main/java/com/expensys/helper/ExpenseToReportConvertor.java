@@ -78,40 +78,45 @@ public class ExpenseToReportConvertor {
                 .toList();
 
         if (SpentBy.ALL.equals(reportRequest.getSpentBy())) {
-            // Aggregate spent amount by subCategory when SpentBy is by "CATEGORY"
-            Map<Category, Double> spentBycategory = filteredList.stream()
+            return filteredList.stream()
+                    // Step 1: Group ReportInfo objects by subCategory and sum their spent amounts
                     .collect(Collectors.groupingBy(
                             ReportInfo::getSubCategory,  // Group by subCategory
-                            Collectors.summingDouble(ReportInfo::getSpent))); // Sum the spent amounts
-            // Create a new list of ReportInfo objects based on Task 1
-            return spentBycategory.entrySet().stream()
+                            Collectors.summingDouble(ReportInfo::getSpent)  // Sum the spent amounts
+                    ))
+                    .entrySet().stream()
+                    // Step 2: Transform the grouped data into ReportInfo objects
                     .map(entry -> ReportInfo.builder()
-                            .subCategory(entry.getKey())
-                            .mainCategory(SUB_TO_MAIN_CATEGORY_MAPPINGS.get(entry.getKey()))
-                            .spentBy(SpentBy.ALL.getSpentBy())
-                            .spent(entry.getValue())
-                            .build())
+                            .subCategory(entry.getKey())  // Set the subCategory
+                            .mainCategory(SUB_TO_MAIN_CATEGORY_MAPPINGS.get(entry.getKey()))  // Determine mainCategory based on mapping
+                            .spentBy(SpentBy.ALL.getSpentBy())  // Set spentBy
+                            .spent(entry.getValue())  // Set the total spent amount
+                            .build()  // Create a ReportInfo object
+                    )
+                    // Step 3: Sort the ReportInfo objects by spent amount in descending order
                     .sorted(Comparator.comparing(ReportInfo::getSpent).reversed())
-                    .toList();
-        } else if (SpentBy.USER.equals(reportRequest.getSpentBy())) {
-            HashMap<String, ReportInfo> reportInfoMap = new HashMap<>();
-            for(ReportInfo reportInfo : reportInfoList){
-                String currentKey = reportRequest.getCategory().equals(Category.SUB) ? reportInfo.getSubCategorySpentByKey() : reportInfo.getMainCategorySpentByKey();
-                if(reportInfoMap.containsKey(currentKey)){
-                    double currentSpentAmount = reportInfo.getSpent();
-                    reportInfo.setSpent(reportInfoMap.get(currentKey).getSpent()+currentSpentAmount);
-                    reportInfoMap.put(currentKey, reportInfo);
-                }else{
-                    reportInfoMap.put(currentKey, reportInfo);
-                }
-            }
-            logger.info("reportRequest -> {}", reportRequest);
-            for (String key : reportInfoMap.keySet()){
-                logger.info("\nkey -> {}, reportInfo -> {}", key, reportInfoMap.get(key));
-            }
+                    .toList();  // Convert the result to a list
 
-            return reportInfoMap.values().stream()
+        } else if (SpentBy.USER.equals(reportRequest.getSpentBy())) {
+            return reportInfoList.stream()
+                    // Step 1: Group ReportInfo objects by key (subCategory or mainCategory)
+                    .collect(Collectors.toMap(
+                            reportInfo -> reportRequest.getCategory().equals(Category.SUB) ? reportInfo.getSubCategorySpentByKey() : reportInfo.getMainCategorySpentByKey(),
+                            reportInfo -> reportInfo,
+                            // Step 2: Merge ReportInfo objects with the same key
+                            (reportInfo1, reportInfo2) -> ReportInfo.builder()
+                                    .subCategory(reportInfo2.getSubCategory())  // Take subCategory from the second ReportInfo
+                                    .mainCategory(reportInfo2.getMainCategory())  // Take mainCategory from the second ReportInfo
+                                    .spent(reportInfo1.getSpent() + reportInfo2.getSpent())  // Sum the spent amounts
+                                    .spentBy(reportInfo2.getSpentBy())  // Take spentBy from the second ReportInfo
+                                    .build()  // Create a new merged ReportInfo object
+                    ))
+                    .values()
+                    // Step 3: Convert the map values (merged ReportInfo objects) to a stream
+                    .stream()
+                    // Step 4: Sort the ReportInfo objects by spent amount in descending order
                     .sorted(Comparator.comparing(ReportInfo::getSpent).reversed())
+                    // Step 5: Convert the sorted stream to a list
                     .toList();
         }
 
