@@ -15,3 +15,6 @@ spring:
     prefix: classpath:/templates/
     suffix: .html
     cache: false
+
+  flyway:
+    baseline-on-migrate: true

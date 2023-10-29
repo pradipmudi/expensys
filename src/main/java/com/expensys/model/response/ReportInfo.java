@@ -2,45 +2,50 @@ package com.expensys.model.response;
 
 import com.expensys.model.enums.Category;
 
+import java.util.Objects;
+
 public class ReportInfo {
-    private Category mainCategory;
-    private String subCategory;  // Ignore in response when null
+    private Category subCategory;
+    private Category mainCategory;  // Ignore in response when null
     private Double spent;
-    private String user;
+    private String spentBy;
 
     ReportInfo(){}
 
-    public Category getMainCategory() {
-        return mainCategory;
+    public Category getSubCategory() {
+        return subCategory;
     }
 
-    public String getSubCategory() {
-        return subCategory;
+    public Category getMainCategory() {
+        return mainCategory;
     }
 
     public Double getSpent() {
         return spent;
     }
 
-    public String getUser() {
-        return user;
+    public String getSpentBy() {
+        return spentBy;
+    }
+
+    public void setSubCategory(Category subCategory) {
+        this.subCategory = subCategory;
     }
 
     public void setMainCategory(Category mainCategory) {
         this.mainCategory = mainCategory;
     }
 
-    public void setSubCategory(String subCategory) {
-        this.subCategory = subCategory;
-    }
-
     public void setSpent(Double spent) {
         this.spent = spent;
     }
 
-    public void setUser(String user) {
-        this.user = user;
+    public void setSpentBy(String spentBy) {
+        this.spentBy = spentBy;
     }
+
+    public String getMainCategorySpentByKey(){ return mainCategory +"_"+spentBy;}
+    public String getSubCategorySpentByKey(){ return subCategory +"_"+spentBy;}
 
     public static class Builder {
         private ReportInfo reportInfo;
@@ -49,13 +54,13 @@ public class ReportInfo {
             this.reportInfo = new ReportInfo();
         }
 
-        public Builder mainCategory(Category mainCategory) {
-            reportInfo.setMainCategory(mainCategory);
+        public Builder subCategory(Category mainCategory) {
+            reportInfo.setSubCategory(mainCategory);
             return this;
         }
 
-        public Builder subCategory(String subCategory) {
-            reportInfo.setSubCategory(subCategory);
+        public Builder mainCategory(Category subCategory) {
+            reportInfo.setMainCategory(subCategory);
             return this;
         }
 
@@ -64,8 +69,8 @@ public class ReportInfo {
             return this;
         }
 
-        public Builder user(String user) {
-            reportInfo.setUser(user);
+        public Builder spentBy(String spentBy) {
+            reportInfo.setSpentBy(spentBy.toUpperCase());
             return this;
         }
 
@@ -79,12 +84,25 @@ public class ReportInfo {
     }
 
     @Override
+    public boolean equals(Object o) {
+        if (this == o) return true;
+        if (!(o instanceof ReportInfo)) return false;
+        ReportInfo that = (ReportInfo) o;
+        return mainCategory == that.mainCategory && spentBy.equalsIgnoreCase(that.spentBy);
+    }
+
+    @Override
+    public int hashCode() {
+        return Objects.hash(mainCategory, spentBy);
+    }
+
+    @Override
     public String toString() {
         return "ReportInfo{" +
-                "mainCategory=" + mainCategory +
-                ", subCategory='" + subCategory + '\'' +
+                "mainCategory=" + subCategory +
+                ", subCategory='" + mainCategory + '\'' +
                 ", spent=" + spent +
-                ", user='" + user + '\'' +
+                ", spentBy='" + spentBy + '\'' +
                 '}';
     }
 }

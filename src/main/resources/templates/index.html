@@ -202,16 +202,16 @@
                                                     <th>Category</th>
                                                     ${selectedCategory === "MAIN" ? "" : "<th>Main Category</th>"}
                                                     <th>Spent</th>
-                                                    ${selectedSpentBy === "USER" ? "<th>User</th>" : ""}
+                                                    ${selectedSpentBy === "USER" ? "<th>Spent By</th>" : ""}
                                                 </tr>
                                             </thead>
                                             <tbody>
                                                 ${monthData.reportInfo.map(info => `
                                                     <tr>
-                                                        <td>${info.mainCategory}</td>
-                                                        ${selectedCategory === "MAIN" ? "" : `<td>${info.subCategory}</td>`}
+                                                        <td>${info.subCategory}</td>
+                                                        ${selectedCategory === "MAIN" ? "" : `<td>${info.mainCategory}</td>`}
                                                         <td>₹${info.spent}</td>
-                                                        ${selectedSpentBy === "USER" ? `<td>${info.user}</td>` : ""}
+                                                        ${selectedSpentBy === "USER" ? `<td>${info.spentBy}</td>` : ""}
                                                     </tr>
                                                 `).join('')}
                                             </tbody>
@@ -232,16 +232,16 @@
                                                     <th>Category</th>
                                                     ${selectedCategory === "MAIN" ? "" : "<th>Main Category</th>"}
                                                     <th>Spent</th>
-                                                    ${selectedSpentBy === "USER" ? "<th>User</th>" : ""}
+                                                    ${selectedSpentBy === "USER" ? "<th>Spent By</th>" : ""}
                                                 </tr>
                                             </thead>
                                             <tbody>
                                                 ${data[0].reportInfo.map(info => `
                                                     <tr>
-                                                        <td>${info.mainCategory}</td>
-                                                        ${selectedCategory === "MAIN" ? "" : `<td>${info.subCategory}</td>`}
+                                                        <td>${info.subCategory}</td>
+                                                        ${selectedCategory === "MAIN" ? "" : `<td>${info.mainCategory}</td>`}
                                                         <td>₹${info.spent}</td>
-                                                        ${selectedSpentBy === "USER" ? `<td>${info.user}</td>` : ""}
+                                                        ${selectedSpentBy === "USER" ? `<td>${info.spentBy}</td>` : ""}
                                                     </tr>
                                                 `).join('')}
                                             </tbody>

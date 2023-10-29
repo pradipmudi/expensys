@@ -9,17 +9,17 @@ public class NewExpense {
     String item;
     Category category;
     Double spent;
-    String user;
+    String spentBy;
 
     public NewExpense() {
     }
 
-    public NewExpense(LocalDate date, String item, Category category, Double spent, String user) {
+    public NewExpense(LocalDate date, String item, Category category, Double spent, String spentBy) {
         this.date = date;
         this.item = item;
         this.category = category;
         this.spent = spent;
-        this.user = user;
+        this.spentBy = spentBy;
     }
 
     public LocalDate getDate() {
@@ -35,8 +35,8 @@ public class NewExpense {
         return spent;
     }
 
-    public String getUser() {
-        return user;
+    public String getSpentBy() {
+        return spentBy;
     }
 
     public String getItem() {
@@ -60,8 +60,8 @@ public class NewExpense {
         this.spent = spent;
     }
 
-    public void setUser(String user) {
-        this.user = user;
+    public void setSpentBy(String spentBy) {
+        this.spentBy = spentBy;
     }
 
     @Override
@@ -71,7 +71,7 @@ public class NewExpense {
                 ", item='" + item + '\'' +
                 ", category=" + category +
                 ", spent=" + spent +
-                ", user='" + user + '\'' +
+                ", spentBy='" + spentBy + '\'' +
                 '}';
     }
 }

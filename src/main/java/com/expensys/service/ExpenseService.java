@@ -69,7 +69,7 @@ public class ExpenseService {
         expenseEntity.setItem(newExpense.getItem());
         expenseEntity.setCategory(newExpense.getCategory().toString());
         expenseEntity.setSpent(newExpense.getSpent());
-        expenseEntity.setSpentBy(newExpense.getUser());
+        expenseEntity.setSpentBy(newExpense.getSpentBy());
         return expenseEntity;
     }
 
