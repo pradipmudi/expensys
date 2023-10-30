@@ -20,11 +20,8 @@ public class ExpenseManagementController {
         this.expenseManagementService = expenseManagementService;
     }
 
-    @CrossOrigin
     @PostMapping("/save")
     public ResponseEntity<HttpStatus> saveExpense(@RequestBody NewExpense newExpense){
-        logger.info("newExpense -> {}",newExpense);
-//        expenseManagementService.addExpense(newExpense);
         return new ResponseEntity<>(expenseManagementService.addExpense(newExpense) ? HttpStatus.OK : HttpStatus.INTERNAL_SERVER_ERROR);
     }
 }

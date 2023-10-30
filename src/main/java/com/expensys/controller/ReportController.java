@@ -21,7 +21,6 @@ public class ReportController {
         this.expenseManagementService = expenseManagementService;
     }
 
-    @CrossOrigin
     @GetMapping
     public ResponseEntity<List<Report>> getReport(@ModelAttribute ReportRequest reportRequest){
         List<Report> reportList = expenseManagementService.getReport(reportRequest);
