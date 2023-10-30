@@ -1,0 +1,131 @@
+    <style>
+        body {
+            font-family: 'Arial', sans-serif;
+            margin: 0;
+            padding: 0;
+            background: linear-gradient(90deg, #FF6B6B, #2E3A87);
+            color: #333;
+        }
+
+        header {
+            background: linear-gradient(90deg, #2E3A87, #FF6B6B);
+            color: white;
+            text-align: center;
+            padding: 20px 0;
+        }
+
+        h1 {
+            font-size: 36px;
+            text-shadow: 2px 2px 4px rgba(0, 0, 0, 0.5);
+        }
+
+        section#filter-options {
+            background-color: #fff;
+            padding: 10px 0;
+            border-radius: 8px;
+            box-shadow: 0 0 10px rgba(0, 0, 0, 0.2);
+            text-align: center;
+        }
+
+        label {
+            font-weight: bold;
+        }
+
+        select {
+            font-size: 14px;
+            padding: 10px;
+            border: 1px solid #ccc;
+            border-radius: 5px;
+            background: #f2f2f2;
+        }
+
+        section#monthly-report {
+            margin: 20px;
+        }
+
+        .report-card {
+            background-color: #f9f9f9;
+            border-radius: 8px;
+            box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+            margin: 20px;
+            padding: 20px;
+            transition: transform 0.2s;
+        }
+
+        .report-card:hover {
+            transform: scale(1.05);
+        }
+
+        h2 {
+            font-size: 24px;
+            margin: 0;
+            color: #2E3A87;
+        }
+
+        table {
+            width: 100%;
+            border-collapse: collapse;
+            border: 1px solid #ccc;
+        }
+
+        th, td {
+            padding: 10px;
+            text-align: left;
+            border-bottom: 1px solid #ccc;
+        }
+
+        th {
+            background-color: #2E3A87;
+            color: white;
+        }
+
+        tr:nth-child(even) {
+            background-color: #f2f2f2;
+        }
+
+        .sortable {
+            cursor: pointer;
+        }
+
+        .sort-icon::before {
+            content: " ";
+            display: inline-block;
+            vertical-align: middle;
+            margin-left: 5px;
+        }
+
+        .sort-icon.asc::before {
+            content: "▲";
+        }
+
+        .sort-icon.desc::before {
+            content: "▼";
+        }
+
+        /* Add or modify these styles to dynamically adjust text size for smaller screens */
+        @media (max-width: 768px) {
+            .report-card {
+                margin: 10px;
+                padding: 10px; /* Adjust padding for better mobile fit */
+            }
+            label {
+                margin: 5px;
+            }
+            select {
+                margin: 5px;
+                width: 100%; /* Ensure full width for better mobile fit */
+            }
+            section#filter-options {
+                padding: 10px;
+            }
+            table {
+                width: 100%; /* Ensure the table takes the full width */
+            }
+            th, td {
+                padding: 10px;
+                white-space: nowrap; /* Prevent text wrapping */
+                font-size: 9px; /* Decrease the font size for smaller screens */
+            }
+        }
+
+    </style>
