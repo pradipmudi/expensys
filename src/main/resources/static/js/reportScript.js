@@ -1,4 +1,4 @@
-<script>
+
     const monthFilter = document.getElementById("month-filter");
     const categoryFilter = document.getElementById("category-filter");
     const spentByFilter = document.getElementById("spent-by-filter");
@@ -117,4 +117,3 @@
 
     // Initial update
     updateReport();
-</script>
