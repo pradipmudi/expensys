@@ -4,12 +4,12 @@ import com.expensys.model.enums.Month;
 
 import java.util.List;
 
-public class Report {
+public class MonthlyReport {
     Month month;
     Double totalSpendings;
     List<ReportInfo> reportInfo;
 
-    public Report(Month month, List<ReportInfo> reportInfo) {
+    public MonthlyReport(Month month, List<ReportInfo> reportInfo) {
         this.month = month;
         this.reportInfo = reportInfo;
         this.totalSpendings = calculateTotalSpendings();

@@ -4,7 +4,7 @@ import com.expensys.model.Expense;
 import com.expensys.model.enums.Category;
 import com.expensys.model.enums.Month;
 import com.expensys.model.request.ReportRequest;
-import com.expensys.model.response.Report;
+import com.expensys.model.response.MonthlyReport;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -27,7 +27,7 @@ public class ReportService {
         this.expenseService = expenseService;
     }
 
-    public List<Report> getReport(ReportRequest reportRequest) {
+    public List<MonthlyReport> getReport(ReportRequest reportRequest) {
         List<Expense> expenseList;
         if (Month.ALL.equals(reportRequest.getMonth())) {
             expenseList = expenseService.getAllExpensesByYear(reportRequest.getYear() == 0 ? LocalDate.now().getYear() : reportRequest.getYear(), reportRequest);
@@ -38,7 +38,7 @@ public class ReportService {
         return prepareReportFromExpenses(reportRequest, expenseList);
     }
 
-    private List<Report> prepareReportFromExpenses(ReportRequest reportRequest, List<Expense> expenseList) {
+    private List<MonthlyReport> prepareReportFromExpenses(ReportRequest reportRequest, List<Expense> expenseList) {
         if (Category.MAIN.equals(reportRequest.getCategory())) {
             return mainCategoryReportService.prepareReport(reportRequest, expenseList);
         } else {

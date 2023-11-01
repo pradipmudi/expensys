@@ -3,7 +3,7 @@ package com.expensys.service;
 import com.expensys.helper.ExpenseToReportConvertor;
 import com.expensys.model.Expense;
 import com.expensys.model.request.ReportRequest;
-import com.expensys.model.response.Report;
+import com.expensys.model.response.MonthlyReport;
 import com.expensys.repository.CategoryMappingRepository;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -25,7 +25,7 @@ public class MainCategoryReportService implements ICategoryReportService {
     }
 
     @Override
-    public List<Report> prepareReport(ReportRequest reportRequest, List<Expense> expenseList) {
+    public List<MonthlyReport> prepareReport(ReportRequest reportRequest, List<Expense> expenseList) {
 
         expenseList = expenseList.stream().filter(expense -> MAIN_CATEGORIES.contains(expense.getCategory())).toList();
         return ExpenseToReportConvertor.getInstance().prepareReportListFromExpenseList(expenseList, reportRequest);

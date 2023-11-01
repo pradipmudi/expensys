@@ -14,7 +14,7 @@
             const selectedSpentBy = spentByFilter.value;
 
             // Make an API request based on selected filters
-            const apiUrl = `http://localhost:8080/report?month=${selectedMonth}&category=${selectedCategory}&spentBy=${selectedSpentBy}`;
+            const apiUrl = `http://localhost:8080/expense/report?month=${selectedMonth}&category=${selectedCategory}&spentBy=${selectedSpentBy}`;
             const response = await fetch(apiUrl);
 
             if (!response.ok) {

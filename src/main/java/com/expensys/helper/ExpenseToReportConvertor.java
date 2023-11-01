@@ -6,7 +6,7 @@ import com.expensys.model.enums.Category;
 import com.expensys.model.enums.Month;
 import com.expensys.model.enums.SpentBy;
 import com.expensys.model.request.ReportRequest;
-import com.expensys.model.response.Report;
+import com.expensys.model.response.MonthlyReport;
 import com.expensys.model.response.ReportInfo;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -18,11 +18,12 @@ import static com.expensys.constant.CategoryMappings.SUB_TO_MAIN_CATEGORY_MAPPIN
 
 public class ExpenseToReportConvertor {
     private static final Logger logger = LoggerFactory.getLogger(ExpenseToReportConvertor.class);
+
     private ExpenseToReportConvertor() {
         // Initialization code
     }
 
-    public List<Report> prepareReportListFromExpenseList(List<Expense> expenseList, ReportRequest reportRequest) {
+    public List<MonthlyReport> prepareReportListFromExpenseList(List<Expense> expenseList, ReportRequest reportRequest) {
         Map<Month, List<ReportInfo>> monthReportInfoMap;
 
         monthReportInfoMap = prepareReportInfoListFromExpenseListByMonth(reportRequest, expenseList);
@@ -42,33 +43,28 @@ public class ExpenseToReportConvertor {
                     .build();
 
             Month currentMonth = expense.getMonth();
-            List<ReportInfo> currentReportInfoList = monthReportInfoMap.get(currentMonth);
+            List<ReportInfo> currentReportInfoList = monthReportInfoMap.computeIfAbsent(currentMonth, k -> new ArrayList<>());
 
-            if (currentReportInfoList == null) {
-                currentReportInfoList = new ArrayList<>();
-                monthReportInfoMap.put(currentMonth, currentReportInfoList);
-            } else {
-                currentReportInfoList.add(reportInfo);
-                monthReportInfoMap.put(currentMonth, currentReportInfoList);
-            }
+            currentReportInfoList.add(reportInfo);
+
 
         }
         return monthReportInfoMap;
     }
 
-    private List<Report> prepareReportInfoFromReportInfoByMonth(Map<Month, List<ReportInfo>> monthReportInfoMap, ReportRequest reportRequest) {
-        List<Report> reportList = new ArrayList<>();
+    private List<MonthlyReport> prepareReportInfoFromReportInfoByMonth(Map<Month, List<ReportInfo>> monthReportInfoMap, ReportRequest reportRequest) {
+        List<MonthlyReport> monthlyReportList = new ArrayList<>();
 
         for (Map.Entry<Month, List<ReportInfo>> monthEntry : monthReportInfoMap.entrySet()) {
             Month month = monthEntry.getKey();
-            Report currentReport = new Report(month, processReportInfoList(monthReportInfoMap.get(month), reportRequest));
-            reportList.add(currentReport);
+            MonthlyReport currentMonthlyReport = new MonthlyReport(month, processReportInfoList(monthReportInfoMap.get(month), reportRequest));
+            monthlyReportList.add(currentMonthlyReport);
         }
 
         // Sort the reportList based on the month's integer values in descending order
-        Collections.sort(reportList, (r1, r2) -> Integer.compare(Integer.valueOf(r2.getMonth().getMonthValue()), Integer.valueOf(r1.getMonth().getMonthValue())));
+        Collections.sort(monthlyReportList, (r1, r2) -> Integer.compare(Integer.valueOf(r2.getMonth().getMonthValue()), Integer.valueOf(r1.getMonth().getMonthValue())));
 
-        return reportList;
+        return monthlyReportList;
     }
 
     public List<ReportInfo> processReportInfoList(List<ReportInfo> reportInfoList, ReportRequest reportRequest) {
