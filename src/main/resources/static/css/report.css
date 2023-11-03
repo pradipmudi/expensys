@@ -124,7 +124,7 @@
             th, td {
                 padding: 10px;
                 white-space: nowrap; /* Prevent text wrapping */
-                font-size: 9px; /* Decrease the font size for smaller screens */
+                font-size: 8.5px; /* Decrease the font size for smaller screens */
             }
         }
 

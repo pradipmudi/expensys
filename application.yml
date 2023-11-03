@@ -2,6 +2,8 @@ server:
   port: 8080
 
 spring:
+  application:
+    name: expensys
   datasource:
     url: jdbc:mysql://localhost:3306/expensys
     username: root
@@ -20,3 +22,7 @@ spring:
     baseline-on-migrate: true
   resources:
     add-mappings: true
+
+logging:
+  level:
+    org.springframework.web: DEBUG

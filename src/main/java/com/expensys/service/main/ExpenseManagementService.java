@@ -1,6 +1,7 @@
 package com.expensys.service.main;
 
 import com.expensys.entity.ExpenseEntity;
+import com.expensys.model.enums.Month;
 import com.expensys.model.request.NewExpense;
 import com.expensys.model.request.ReportRequest;
 import com.expensys.model.response.MonthlyReport;
@@ -39,8 +40,12 @@ public class ExpenseManagementService {
         return true;
     }
 
-    public List<ExpenseEntity> getAllExpenses(LocalDate startDate, LocalDate endDate){
-        return null;
+    public List<ExpenseEntity> getExpenseByDateRange(LocalDate startDate, LocalDate endDate){
+        return expenseService.getExpenseByDateRange(startDate, endDate);
+    }
+
+    public List<ExpenseEntity> getExpensesByMonth(Month month){
+        return expenseService.getExpenseEntitiesByMonth(month);
     }
 
 }

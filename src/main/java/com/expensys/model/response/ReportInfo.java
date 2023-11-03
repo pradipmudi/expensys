@@ -1,6 +1,7 @@
 package com.expensys.model.response;
 
 import com.expensys.model.enums.Category;
+import com.fasterxml.jackson.annotation.JsonIgnore;
 
 import java.util.Objects;
 
@@ -44,7 +45,9 @@ public class ReportInfo {
         this.spentBy = spentBy;
     }
 
+    @JsonIgnore
     public String getMainCategorySpentByKey(){ return mainCategory +"_"+spentBy;}
+    @JsonIgnore
     public String getSubCategorySpentByKey(){ return subCategory +"_"+spentBy;}
 
     public static class Builder {

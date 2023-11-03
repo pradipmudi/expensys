@@ -32,6 +32,11 @@ public class ExpenseService {
     }
 
     public List<Expense> getExpensesByMonth(Month month, ReportRequest reportRequest) {
+        List<ExpenseEntity> expenseEntityList = getExpenseEntitiesByMonth(month);
+        return prepareExpenseListFromExpenseEntityList(expenseEntityList, reportRequest);
+    }
+
+    public List<ExpenseEntity> getExpenseEntitiesByMonth(Month month){
         int year = LocalDate.now().getYear(); // You can use the current year or specify a year as needed
         DateTimeFormatter formatter = DateTimeFormatter.ofPattern("yyyy-MM-dd");
 
@@ -40,8 +45,7 @@ public class ExpenseService {
 
         // Create the LocalDate for the end of the month
         LocalDate dateEnd = LocalDate.parse(dateStart.plusMonths(1).minusDays(1).format(formatter));
-        List<ExpenseEntity> expenseEntityList = expenseRepository.findByDateBetween(dateStart, dateEnd);
-        return prepareExpenseListFromExpenseEntityList(expenseEntityList, reportRequest);
+        return expenseRepository.findByDateBetween(dateStart, dateEnd);
     }
 
     private List<Expense> prepareExpenseListFromExpenseEntityList(List<ExpenseEntity> expenseEntityList, ReportRequest reportRequest) {
@@ -52,14 +56,18 @@ public class ExpenseService {
             Expense expense = new Expense(Month.valueOf(String.valueOf(expenseEntity.getDate().getMonth())), expenseEntity.getItem(), category, expenseEntity.getSpent(), expenseEntity.getSpentBy());
             expenseList.add(expense);
         }
-        for (Expense expense : expenseList) {
-            logger.info("expense -> {}",expense);
-        }
+//        for (Expense expense : expenseList) {
+//            logger.info("expense -> {}",expense);
+//        }
         return expenseList;
     }
 
     List<Expense> getAllExpenses() {
         return prepareExpenseListFromExpenseEntityList(expenseRepository.findAll(), null);
+    }
+
+    public List<ExpenseEntity> getExpenseByDateRange(LocalDate startDate, LocalDate endDate){
+        return expenseRepository.findByDateBetween(startDate, endDate);
     }
 
     public void saveExpense(NewExpense newExpense) {
