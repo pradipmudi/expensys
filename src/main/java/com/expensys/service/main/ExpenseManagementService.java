@@ -15,6 +15,9 @@ import org.springframework.stereotype.Service;
 import java.time.LocalDate;
 import java.util.List;
 
+import static java.util.Collections.reverseOrder;
+import static java.util.Comparator.comparing;
+
 @Service
 public class ExpenseManagementService {
     Logger logger = LoggerFactory.getLogger(ExpenseManagementService.class);
@@ -44,8 +47,24 @@ public class ExpenseManagementService {
         return expenseService.getExpenseByDateRange(startDate, endDate);
     }
 
-    public List<ExpenseEntity> getExpensesByMonth(Month month){
-        return expenseService.getExpenseEntitiesByMonth(month);
+    public List<ExpenseEntity> getExpensesByMonth(Month month, Integer page, Integer itemsPerPage, String sortField, String sortOrder){
+        List<ExpenseEntity> sortedExpenses = expenseService.getExpenseEntitiesByMonth(month)
+                .stream()
+                .sorted(comparing(ExpenseEntity::getDate, reverseOrder())
+                        .thenComparing(ExpenseEntity::getId, reverseOrder()))
+                .toList();
+        logger.info("sortedExpenses -> {}",sortedExpenses);
+
+        if(page == null || itemsPerPage == null) return sortedExpenses;
+
+        int startIndex = (page-1) * itemsPerPage;
+        int endIndex = startIndex+itemsPerPage;
+
+        if(startIndex > sortedExpenses.size() || endIndex > sortedExpenses.size()){
+            throw new RuntimeException("No data available for pageNo: "+page);
+        }
+        return sortedExpenses.subList(startIndex, endIndex);
+
     }
 
 }

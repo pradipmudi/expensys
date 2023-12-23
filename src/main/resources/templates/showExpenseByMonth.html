@@ -1,0 +1,58 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.w3.org/1999/xhtml">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Expense Tracker</title>
+    <link th:href="@{/css/styles.css}" rel="stylesheet" type="text/css" >
+</head>
+<body>
+<h1>Expense Tracker</h1>
+<label for="monthSelect">Select a Month:</label>
+<select id="monthSelect" onchange="fetchExpenseData()" center></select>
+
+<!-- Add loading spinner -->
+<div id="loadingSpinner"></div>
+
+<!-- Add error message display -->
+<div id="errorMessage"></div>
+
+<!-- Pagination controls at the top -->
+<div id="paginationTop" style="text-align: center; margin: 20px 0;">
+    <button onclick="previousPage()">Previous</button>
+    <span id="currentPageTop">1</span>
+    <button onclick="nextPage()">Next</button>
+</div>
+
+<table id="expenseTable">
+    <thead>
+    <tr>
+        <th class="sortable" data-field="Date" onclick="sortColumn('date')">Date
+            <span class="sort-icon" id="sort-date-icon"></span>
+        </th>
+        <th class="sortable" data-field="Item" onclick="sortColumn('item')">Item
+            <span class="sort-icon" id="sort-item-icon"></span>
+        </th>
+        <th class="sortable" data-field="Category" onclick="sortColumn('category')">Category
+            <span class="sort-icon" id="sort-category-icon"></span>
+        </th>
+        <th class="sortable" data-field="Spent" onclick="sortColumn('spent')">Spent
+            <span class="sort-icon" id="sort-spent-icon"></span>
+        </th>
+        <th class="sortable" data-field="Spent By" onclick="sortColumn('spentBy')">Spent By
+            <span class="sort-icon" id="sort-spentBy-icon"></span>
+        </th>
+    </tr>
+    </thead>
+    <tbody></tbody>
+</table>
+
+<!-- Pagination controls at the bottom -->
+<div id="paginationBottom" style="text-align: center; margin-top: 20px;">
+    <button onclick="previousPage()">Previous</button>
+    <span id="currentPageBottom">1</span>
+    <button onclick="nextPage()">Next</button>
+</div>
+<script th:src="@{/js/expenseByMonth.js}"></script>
+</body>
+</html>

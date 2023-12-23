@@ -56,9 +56,6 @@ public class ExpenseService {
             Expense expense = new Expense(Month.valueOf(String.valueOf(expenseEntity.getDate().getMonth())), expenseEntity.getItem(), category, expenseEntity.getSpent(), expenseEntity.getSpentBy());
             expenseList.add(expense);
         }
-//        for (Expense expense : expenseList) {
-//            logger.info("expense -> {}",expense);
-//        }
         return expenseList;
     }
 

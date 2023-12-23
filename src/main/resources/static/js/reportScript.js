@@ -40,9 +40,10 @@
     function createReportCard(data, selectedSpentBy) {
         const reportCard = document.createElement("div");
         reportCard.className = "report-card";
+        const formattedTotalSpendings = parseFloat(data.totalSpendings).toFixed(2);
         reportCard.innerHTML = `
             <h2>${data.month}</h2>
-            <p>Total Spendings: ₹${data.totalSpendings}</p>
+            <h3><p>Total Spendings: ₹${formattedTotalSpendings}</p></h3>
             <table>
                 <thead>
                     <tr>
@@ -67,7 +68,7 @@
                     ${sortReportData(data.reportInfo, selectedSpentBy).map(info => `
                         <tr>
                             <td>${info.subCategory}</td>
-                            <td>₹${info.spent}</td>
+                            <td>₹${parseFloat(info.spent).toFixed(2)}</td>
                             ${selectedSpentBy === "ALL" ? "" : `<td>${info.spentBy}</td>`}
                         </tr>
                     `).join('')}

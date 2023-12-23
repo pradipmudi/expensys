@@ -13,4 +13,8 @@ public class ExpensysController {
     public String addExpense(){
         return "addexpense";
     }
+    @GetMapping("/expenses")
+    public String expensesByMonth(){
+        return "showExpenseByMonth";
+    }
 }
