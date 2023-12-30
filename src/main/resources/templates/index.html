@@ -7,11 +7,31 @@
     <link rel="stylesheet" href="styles.css">
     <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
     <link th:href="@{/css/styles.css}" rel="stylesheet" type="text/css" >
+    <style>
+        /* Add custom CSS for logo size and alignment */
+        header {
+            display: flex;
+            align-items: center;
+        }
 
+        /* Modify the logo size and position it in the top left corner */
+        #company-logo {
+            width: 100px;/* Adjust the width as needed */
+            height: auto; /* Maintain aspect ratio */
+            margin-right: 20px; /* Adjust margin as needed */
+        }
+
+        /* Ensure the header takes the full width */
+        header h1 {
+            flex-grow: 1;
+            margin: 0;
+        }
+    </style>
 
 </head>
 <body>
 <header>
+    <img id="company-logo" src="images/logo.png" alt="Company Logo">
     <h1>Monthly Spending Report</h1>
 </header>
 

@@ -95,10 +95,33 @@
             pointer-events: none;
         }
     </style>
+    <style>
+        /* Add custom CSS for logo size and alignment */
+        header {
+            display: flex;
+            align-items: center;
+        }
+
+        /* Modify the logo size and position it in the top left corner */
+        #company-logo {
+            width: 100px;/* Adjust the width as needed */
+            height: auto; /* Maintain aspect ratio */
+            margin-right: 20px; /* Adjust margin as needed */
+        }
+
+        /* Ensure the header takes the full width */
+        header h1 {
+            flex-grow: 1;
+            margin: 0;
+        }
+    </style>
 </head>
 <body>
 <div class="container">
-    <h1>Add Expense</h1>
+    <header>
+        <img id="company-logo" src="images/logo.png" alt="Company Logo">
+        <h1>Add Expense</h1>
+    </header>
     <form id="expenseForm" action="/expense/save" method="post">
         <label for="date">Date:</label>
         <input type="date" id="date" name="date" required>
@@ -110,17 +133,18 @@
         <div class="select-wrapper">
             <select id="subCategory" name="subCategory" required>
                 <option value="" disabled selected>-- Select Category --</option>
-                <option value="GROCERIES">Groceries</option>
-                <option value="VEGETABLES_FRUITS_DAIRY_AND_MEAT">Vegetables, Fruits, Dairy and Meat</option>
-                <option value="MEDICAL">Medical</option>
-                <option value="OUTSIDE_FOOD">Outside Food</option>
-                <option value="LOSE_OF_MONEY">Loss of Money</option>
-                <option value="SALON_AND_COSMETICS">Salon and Beauty Products</option>
-                <option value="TRANSPORT">Transport</option>
-                <option value="SHOPPING">Shopping</option>
-                <option value="ENTERTAINMENT">Entertainment</option>
-                <option value="RENT_AND_OTHER_BILLS">Rent and Other Bills</option>
-                <option value="OTHERS">Others</option>
+                <option value="ENTERTAINMENT">🎬 Entertainment</option>
+                <option value="GROCERIES">🛒 Groceries</option>
+                <option value="INVESTMENTS">💼 Investments</option>
+                <option value="LOSS_OF_MONEY">💸 Loss of Money</option>
+                <option value="MEDICAL">️💊 Medical</option>
+                <option value="OUTSIDE_FOOD">🍔 Outside Food</option>
+                <option value="RENT_AND_OTHER_BILLS">🏠 Rent and Other Bills</option>
+                <option value="SALON_AND_COSMETICS">💇‍♀️ Salon and Beauty Products</option>
+                <option value="SHOPPING">🛍️ Shopping</option>
+                <option value="TRANSPORT">🚗 Transport</option>
+                <option value="VEGETABLES_FRUITS_DAIRY_AND_MEAT">🥕🍏🥛🥩 Vegetables, Fruits, Dairy and Meat</option>
+                <option value="OTHERS">🌟 Others</option>
             </select>
             <div class="select-icon">&#9660;</div>
         </div>

@@ -5,6 +5,42 @@
     const monthlyReport = document.getElementById("monthly-report");
     let currentSortField = null;
     let currentSortOrder = 1;
+    const categoryKeyToLabelMappings = {
+        GROCERIES: 'Groceries',
+        VEGETABLES_FRUITS_DAIRY_AND_MEAT: 'Vegetables, Fruits, Dairy and Meat',
+        MEDICAL: 'Medical',
+        OUTSIDE_FOOD: 'Outside Food',
+        LOSE_OF_MONEY: 'Loss of Money',
+        SALON_AND_COSMETICS: 'Salon and Beauty Products',
+        TRANSPORT: 'Transport',
+        SHOPPING: 'Shopping',
+        ENTERTAINMENT: 'Entertainment',
+        RENT_AND_OTHER_BILLS: 'Rent and Other Bills',
+        INVESTMENTS: 'Investments',
+        OTHERS: 'Others',
+        ESSENTIAL: 'Essential',
+        EXPENSE: 'Expense'
+    };
+
+    const categoryKeyToEmojiMappings = {
+        GROCERIES: '🛒', // Groceries
+        VEGETABLES_FRUITS_DAIRY_AND_MEAT: '🥦🍏🥛🥩', // Vegetables, Fruits, Dairy and Meat
+        MEDICAL: '️💊', // Medicine and other medical expenses
+        OUTSIDE_FOOD: '🍔', // Outside Food
+        LOSS_OF_MONEY: '💸', // Loss of Money
+        SALON_AND_COSMETICS: '💇‍♀️', // Salon and Beauty Products
+        TRANSPORT: '🚗', // Transport related expenses
+        SHOPPING: '🛍️', // Shopping
+        ENTERTAINMENT: '🎬', // Entertainment
+        RENT_AND_OTHER_BILLS: '🏠', // Rent and Other Bills
+        INVESTMENTS: '💼', // Investments
+        ESSENTIAL: '🆘', // Essentials
+        EXPENSE: '💰', // Expense
+        OTHERS: '🌟' // Others
+    };
+
+
+
 
     // Function to fetch and update the data based on filters
     async function updateReport() {
@@ -43,7 +79,7 @@
         const formattedTotalSpendings = parseFloat(data.totalSpendings).toFixed(2);
         reportCard.innerHTML = `
             <h2>${data.month}</h2>
-            <h3><p>Total Spendings: ₹${formattedTotalSpendings}</p></h3>
+            <h3>Total Spendings: ₹${formattedTotalSpendings}</h3>
             <table>
                 <thead>
                     <tr>
@@ -67,7 +103,7 @@
                 <tbody>
                     ${sortReportData(data.reportInfo, selectedSpentBy).map(info => `
                         <tr>
-                            <td>${info.subCategory}</td>
+                            <td>${categoryKeyToEmojiMappings[info.subCategory]} ${categoryKeyToLabelMappings[info.subCategory]}</td>
                             <td>₹${parseFloat(info.spent).toFixed(2)}</td>
                             ${selectedSpentBy === "ALL" ? "" : `<td>${info.spentBy}</td>`}
                         </tr>

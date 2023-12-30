@@ -5,54 +5,64 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Expense Tracker</title>
     <link th:href="@{/css/styles.css}" rel="stylesheet" type="text/css" >
+    <style>
+        /* Add custom CSS for logo size and alignment */
+        header {
+            display: flex;
+            align-items: center;
+        }
+
+        /* Modify the logo size and position it in the top left corner */
+        #company-logo {
+            width: 100px;/* Adjust the width as needed */
+            height: auto; /* Maintain aspect ratio */
+            margin-right: 20px; /* Adjust margin as needed */
+        }
+
+        /* Ensure the header takes the full width */
+        header h1 {
+            flex-grow: 1;
+            margin: 0;
+        }
+    </style>
 </head>
 <body>
-<h1>Expense Tracker</h1>
-<label for="monthSelect">Select a Month:</label>
-<select id="monthSelect" onchange="fetchExpenseData()" center></select>
+<header>
+    <img id="company-logo" src="images/logo.png" alt="Company Logo">
+    <h1>Expense Tracker</h1>
+</header>
+<section id="filter-options">
+    <label for="monthSelect">Select a Month:</label>
+    <select id="monthSelect" onchange="fetchExpenseData()" center></select>
+</section>
+    <!-- Add loading spinner -->
+    <div id="loadingSpinner"></div>
 
-<!-- Add loading spinner -->
-<div id="loadingSpinner"></div>
+    <!-- Add error message display -->
+    <div id="errorMessage"></div>
 
-<!-- Add error message display -->
-<div id="errorMessage"></div>
+    <!-- Pagination controls at the top -->
+    <div id="paginationTop" style="text-align: center; margin: 20px 0;">
+        <button onclick="previousPage()">Previous</button>
+        <span id="currentPageTop">1</span>
+        <button onclick="nextPage()">Next</button>
+    </div>
+    <div class="table-wrapper">
 
-<!-- Pagination controls at the top -->
-<div id="paginationTop" style="text-align: center; margin: 20px 0;">
-    <button onclick="previousPage()">Previous</button>
-    <span id="currentPageTop">1</span>
-    <button onclick="nextPage()">Next</button>
-</div>
+<!--            <tbody></tbody>-->
+            <div class="transactions" id="transactionsContainer">
+                <!-- Transactions will be dynamically added here -->
+            </div>
 
-<table id="expenseTable">
-    <thead>
-    <tr>
-        <th class="sortable" data-field="Date" onclick="sortColumn('date')">Date
-            <span class="sort-icon" id="sort-date-icon"></span>
-        </th>
-        <th class="sortable" data-field="Item" onclick="sortColumn('item')">Item
-            <span class="sort-icon" id="sort-item-icon"></span>
-        </th>
-        <th class="sortable" data-field="Category" onclick="sortColumn('category')">Category
-            <span class="sort-icon" id="sort-category-icon"></span>
-        </th>
-        <th class="sortable" data-field="Spent" onclick="sortColumn('spent')">Spent
-            <span class="sort-icon" id="sort-spent-icon"></span>
-        </th>
-        <th class="sortable" data-field="Spent By" onclick="sortColumn('spentBy')">Spent By
-            <span class="sort-icon" id="sort-spentBy-icon"></span>
-        </th>
-    </tr>
-    </thead>
-    <tbody></tbody>
-</table>
+<!--        </table>-->
+    </div>
+    <!-- Pagination controls at the bottom -->
+    <div id="paginationBottom" style="text-align: center; margin-top: 20px;">
+        <button onclick="previousPage()">Previous</button>
+        <span id="currentPageBottom">1</span>
+        <button onclick="nextPage()">Next</button>
+    </div>
 
-<!-- Pagination controls at the bottom -->
-<div id="paginationBottom" style="text-align: center; margin-top: 20px;">
-    <button onclick="previousPage()">Previous</button>
-    <span id="currentPageBottom">1</span>
-    <button onclick="nextPage()">Next</button>
-</div>
 <script th:src="@{/js/expenseByMonth.js}"></script>
 </body>
 </html>

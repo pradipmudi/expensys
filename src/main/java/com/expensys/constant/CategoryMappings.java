@@ -29,6 +29,7 @@ public class CategoryMappings {
         subCategories.add(Category.TRANSPORT);
         subCategories.add(Category.SHOPPING);
         subCategories.add(Category.ENTERTAINMENT);
+        subCategories.add(Category.INVESTMENTS);
         subCategories.add(Category.RENT_AND_OTHER_BILLS);
         subCategories.add(Category.OTHERS);
         SUB_CATEGORIES = Collections.unmodifiableSet(subCategories);
@@ -42,11 +43,12 @@ public class CategoryMappings {
         subToMainCategoryMappings.put(Category.SHOPPING, Category.EXPENSE);
         subToMainCategoryMappings.put(Category.OUTSIDE_FOOD, Category.EXPENSE);
         subToMainCategoryMappings.put(Category.LOSE_OF_MONEY, Category.LOSE_OF_MONEY);
-        subToMainCategoryMappings.put(Category.OTHERS, Category.EXPENSE);
         subToMainCategoryMappings.put(Category.ESSENTIAL, Category.ESSENTIAL);
         subToMainCategoryMappings.put(Category.EXPENSE, Category.EXPENSE);
         subToMainCategoryMappings.put(Category.ENTERTAINMENT, Category.EXPENSE);
         subToMainCategoryMappings.put(Category.RENT_AND_OTHER_BILLS, Category.EXPENSE);
+        subToMainCategoryMappings.put(Category.INVESTMENTS, Category.ESSENTIAL);
+        subToMainCategoryMappings.put(Category.OTHERS, Category.EXPENSE);
         SUB_TO_MAIN_CATEGORY_MAPPINGS = Collections.unmodifiableMap(subToMainCategoryMappings);
     }
 }

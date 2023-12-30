@@ -15,6 +15,7 @@ public enum Category {
     EXPENSE("expense"),
     ENTERTAINMENT("entertainment"),
     RENT_AND_OTHER_BILLS("rent and other bills"),
+    INVESTMENTS("investments"),
     OTHERS("others");
 
     private String cat;
