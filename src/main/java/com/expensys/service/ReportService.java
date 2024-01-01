@@ -30,10 +30,10 @@ public class ReportService {
     public List<MonthlyReport> getReport(ReportRequest reportRequest) {
         List<Expense> expenseList;
         if (Month.ALL.equals(reportRequest.getMonth())) {
-            expenseList = expenseService.getAllExpensesByYear(reportRequest.getYear() == 0 ? LocalDate.now().getYear() : reportRequest.getYear(), reportRequest);
+            expenseList = expenseService.getAllExpensesByYear((reportRequest.getYear() == 0) ? LocalDate.now().getYear() : reportRequest.getYear(), reportRequest);
         } else {
             // this call generally aims to get the specific month data of the current year
-            expenseList = expenseService.getExpensesByMonth(reportRequest.getMonth(), reportRequest);
+            expenseList = expenseService.getExpensesByMonthAndYear(reportRequest);
         }
         return prepareReportFromExpenses(reportRequest, expenseList);
     }

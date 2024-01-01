@@ -7,6 +7,7 @@ let isMobileView = window.innerWidth <= 768;
 
 const transactionsContainer = document.getElementById('transactionsContainer');
 const monthSelect = document.getElementById('monthSelect');
+const yearFilter = document.getElementById("year-filter");
 const nextPageButtonTop = document.querySelector('#paginationTop button:last-of-type');
 const nextPageButtonBottom = document.querySelector('#paginationBottom button:last-of-type');
 const loadingSpinner = document.getElementById('loadingSpinner');
@@ -30,7 +31,7 @@ const categoryKeyToLabelMappings = {
 
 const emojis = {
     date: '📅',
-    item: '🍽️',
+    item: '🛒',
     category: '🏷️',
     spent: '💵',
     spentBy: '👤'
@@ -125,8 +126,9 @@ function handleWindowResize() {
 }
 
 function fetchExpenseData() {
+    const selectedYear = yearFilter.value;
     const selectedMonth = monthSelect.value;
-    const apiUrl = `http://localhost:8080/expense/${selectedMonth}?page=${currentPage}&itemsPerPage=${itemsPerPage}&sortField=${currentSortField}&sortOrder=${currentSortOrder}`;
+    const apiUrl = `http://localhost:8080/expense/${selectedYear}/${selectedMonth}?page=${currentPage}&itemsPerPage=${itemsPerPage}&sortField=${currentSortField}&sortOrder=${currentSortOrder}`;
 
     loadingSpinner.innerHTML = 'Loading...';
     loadingSpinner.style.display = 'block';
@@ -156,7 +158,7 @@ function fetchExpenseData() {
     })
         .catch(error => {
         console.error('Error fetching data:', error);
-        errorMessage.innerHTML = `Error fetching data. Please try again.<br>Error: ${error.message}`;
+        errorMessage.innerHTML = `No data available or there was some error fetching data. Please try again.<br>Error: ${error.message}`;
         errorMessage.style.display = 'block';
 
         nextPageButtonTop.disabled = true;

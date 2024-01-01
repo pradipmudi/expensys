@@ -14,12 +14,14 @@ body {
     color: #333;
     line-height: 1.6;
 }
+
 /* General styles */
 .transactions {
     display: flex;
     flex-direction: column;
     font-family: Arial, sans-serif;
     padding: 10px;
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1); /* Consistent box shadow */
 }
 
 .transaction {
@@ -42,7 +44,8 @@ body {
 h1, h2, h3 {
     text-align: center;
     margin-top: 20px;
-    font-weight: 600;
+    font-weight: 700; /* Adjusted font weight */
+    line-height: 1.4; /* Improved line height */
 }
 
 h1 {
@@ -61,15 +64,13 @@ h2 {
 h3 {
     font-size: 1.0rem;
     margin: 0;
-/*    color: #3d5af1;*/
+    /* color: #3d5af1; */
 }
 
 /* Form elements */
 section#filter-options {
     background-color: #f9fafb;
     padding: 20px;
-/*    border-radius: 12px;*/
-/*    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);*/
     text-align: center;
     margin-bottom: 20px;
     display: flex;
@@ -93,22 +94,30 @@ select {
     width: 100%;
     max-width: 300px;
     margin: 10px auto;
+    transition: border-color 0.3s ease-in-out, box-shadow 0.3s ease-in-out;
 }
 
-select:hover {
+select:hover,
+select:focus {
     border-color: #3d5af1;
+    box-shadow: 0 0 8px rgba(61, 90, 241, 0.3);
 }
 
 /* Buttons */
 button {
     padding: 14px 28px;
-    border: none;
+    border: 2px solid #3d5af1; /* Enhanced border */
     border-radius: 8px;
     cursor: pointer;
     font-size: 1rem;
-    transition: background-color 0.3s ease-in-out, transform 0.3s ease-in-out, box-shadow 0.3s ease-in-out;
+    transition: background-color 0.3s ease-in-out, color 0.3s ease-in-out, transform 0.3s ease-in-out, box-shadow 0.3s ease-in-out, border-color 0.3s ease-in-out;
     background-color: #3d5af1;
     color: #fff;
+}
+
+button:hover {
+    background-color: #fff;
+    color: #3d5af1;
 }
 
 /* Pagination controls */
@@ -125,6 +134,7 @@ button {
     background-color: #27ae60 !important;
     color: #fff !important;
     margin: 0 10px !important;
+    transition: background-color 0.3s ease-in-out, box-shadow 0.3s ease-in-out, transform 0.3s ease-in-out;
 }
 
 #pagination button:hover,
@@ -144,22 +154,21 @@ button {
 .table-wrapper {
     overflow-x: auto;
     border-radius: 8px;
-/*    box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);*/
     max-width: 100%;
-    margin: 20px 20px 0; /* Adjust margin to create space from top */
+    margin: 20px 20px 0;
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
 }
 
 table {
     width: 100%;
     border-spacing: 0;
     background-color: #fff;
-/*    border-radius: 12px;*/
     overflow-x: auto;
     box-shadow: 0 8px 16px rgba(0, 0, 0, 0.1);
     transition: box-shadow 0.3s ease-in-out;
-    max-width: calc(100% - 40px); /* Adjust maximum width */
-    margin: 0 auto; /* Center the table */
-    table-layout: fixed; /* Added to fix column widths */
+    max-width: calc(100% - 40px);
+    margin: 0 auto;
+    table-layout: fixed;
 }
 
 th, td {
@@ -169,7 +178,6 @@ th, td {
     font-size: 0.8rem;
     max-width: 200px;
     white-space: pre-wrap;
-/*    overflow: hidden;*/
     text-overflow: ellipsis;
 }
 
@@ -207,14 +215,6 @@ tr:hover {
         font-size: 0.9rem;
         padding: 12px; /* Increased padding for better touch interaction */
         text-align: left;
-    }
-
-    h1 {
-        font-size: 2rem;
-    }
-
-    h2 {
-        font-size: 1.5rem;
     }
 
     #pagination button,
@@ -257,5 +257,17 @@ tr:hover {
     @keyframes spin {
         0% { transform: rotate(0deg); }
         100% { transform: rotate(360deg); }
+    }
+    button {
+        padding: 12px 24px;
+        font-size: 0.9rem;
+    }
+
+    h1 {
+        font-size: 1.8rem;
+    }
+
+    h2 {
+        font-size: 1.3rem;
     }
 }

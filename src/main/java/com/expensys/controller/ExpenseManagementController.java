@@ -39,8 +39,8 @@ public class ExpenseManagementController {
         return new ResponseEntity<>(monthlyReportList, HttpStatus.OK);
     }
 
-    @GetMapping("/{month}")
-    public ResponseEntity<List<ExpenseEntity>> getExpenseByMonth(
+    @GetMapping("/{year}/{month}")
+    public ResponseEntity<List<ExpenseEntity>> getExpenseByMonth(@PathVariable(required = false) Integer year,
             @PathVariable Month month,
             @RequestParam(name = "page", required = false) Integer page,
             @RequestParam(name = "itemsPerPage", required = false) Integer itemsPerPage,
@@ -49,7 +49,7 @@ public class ExpenseManagementController {
     ) {
         try {
             // Update the service method to handle new parameters
-            List<ExpenseEntity> expenses = expenseManagementService.getExpensesByMonth(month, page, itemsPerPage, sortField, sortOrder);
+            List<ExpenseEntity> expenses = expenseManagementService.getExpensesByMonth(year, month, page, itemsPerPage, sortField, sortOrder);
 
             return new ResponseEntity<>(expenses, HttpStatus.OK);
         } catch (RuntimeException e) {

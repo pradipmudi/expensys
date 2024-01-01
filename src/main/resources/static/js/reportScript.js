@@ -1,4 +1,5 @@
 
+    const yearFilter = document.getElementById("year-filter");
     const monthFilter = document.getElementById("month-filter");
     const categoryFilter = document.getElementById("category-filter");
     const spentByFilter = document.getElementById("spent-by-filter");
@@ -45,16 +46,17 @@
     // Function to fetch and update the data based on filters
     async function updateReport() {
         try {
+            const selectedYear = yearFilter.value;
             const selectedMonth = monthFilter.value;
             const selectedCategory = categoryFilter.value;
             const selectedSpentBy = spentByFilter.value;
 
             // Make an API request based on selected filters
-            const apiUrl = `http://localhost:8080/expense/report?month=${selectedMonth}&category=${selectedCategory}&spentBy=${selectedSpentBy}`;
+            const apiUrl = `http://localhost:8080/expense/report?year=${selectedYear}&month=${selectedMonth}&category=${selectedCategory}&spentBy=${selectedSpentBy}`;
             const response = await fetch(apiUrl);
 
             if (!response.ok) {
-                throw new Error(`API request failed with status: ${response.status}`);
+                throw new Error(`No data available or API request failed with status: ${response.status}`);
             }
 
             const data = await response.json();
@@ -151,6 +153,7 @@
     monthFilter.addEventListener("change", updateReport);
     categoryFilter.addEventListener("change", updateReport);
     spentByFilter.addEventListener("change", updateReport);
+    yearFilter.addEventListener("change", updateReport);
 
     // Initial update
     updateReport();

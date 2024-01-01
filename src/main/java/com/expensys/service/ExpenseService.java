@@ -18,6 +18,7 @@ import java.util.ArrayList;
 import java.util.List;
 
 import static com.expensys.constant.CategoryMappings.SUB_TO_MAIN_CATEGORY_MAPPINGS;
+import static java.util.Objects.requireNonNullElseGet;
 
 @Service
 public class ExpenseService {
@@ -31,13 +32,13 @@ public class ExpenseService {
         this.expenseRepository = expenseRepository;
     }
 
-    public List<Expense> getExpensesByMonth(Month month, ReportRequest reportRequest) {
-        List<ExpenseEntity> expenseEntityList = getExpenseEntitiesByMonth(month);
+    public List<Expense> getExpensesByMonthAndYear(ReportRequest reportRequest) {
+        List<ExpenseEntity> expenseEntityList = getExpenseEntitiesByMonthAndYear(reportRequest.getYear(), reportRequest.getMonth());
         return prepareExpenseListFromExpenseEntityList(expenseEntityList, reportRequest);
     }
 
-    public List<ExpenseEntity> getExpenseEntitiesByMonth(Month month){
-        int year = LocalDate.now().getYear(); // You can use the current year or specify a year as needed
+    public List<ExpenseEntity> getExpenseEntitiesByMonthAndYear(Integer year, Month month){
+        year = requireNonNullElseGet(year, () -> LocalDate.now().getYear()); // You can use the current year or specify a year as needed
         DateTimeFormatter formatter = DateTimeFormatter.ofPattern("yyyy-MM-dd");
 
         // Create the LocalDate for the start of the month

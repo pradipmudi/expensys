@@ -32,6 +32,13 @@
     <h1>Expense Tracker</h1>
 </header>
 <section id="filter-options">
+    <label for="year-filter">Select Year:</label>
+    <select id="year-filter" onchange="fetchExpenseData()">
+        <option value="2024">2024</option>
+        <option value="2023">2023</option>
+        <option value="2022">2022</option>
+    </select>
+
     <label for="monthSelect">Select a Month:</label>
     <select id="monthSelect" onchange="fetchExpenseData()" center></select>
 </section>

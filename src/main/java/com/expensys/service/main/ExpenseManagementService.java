@@ -47,8 +47,8 @@ public class ExpenseManagementService {
         return expenseService.getExpenseByDateRange(startDate, endDate);
     }
 
-    public List<ExpenseEntity> getExpensesByMonth(Month month, Integer page, Integer itemsPerPage, String sortField, String sortOrder){
-        List<ExpenseEntity> sortedExpenses = expenseService.getExpenseEntitiesByMonth(month)
+    public List<ExpenseEntity> getExpensesByMonth(Integer year, Month month, Integer page, Integer itemsPerPage, String sortField, String sortOrder){
+        List<ExpenseEntity> sortedExpenses = expenseService.getExpenseEntitiesByMonthAndYear(year, month)
                 .stream()
                 .sorted(comparing(ExpenseEntity::getDate, reverseOrder())
                         .thenComparing(ExpenseEntity::getId, reverseOrder()))
@@ -56,6 +56,8 @@ public class ExpenseManagementService {
         logger.info("sortedExpenses -> {}",sortedExpenses);
 
         if(page == null || itemsPerPage == null) return sortedExpenses;
+
+        if(itemsPerPage > sortedExpenses.size()) itemsPerPage = sortedExpenses.size();
 
         int startIndex = (page-1) * itemsPerPage;
         int endIndex = startIndex+itemsPerPage;
