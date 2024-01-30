@@ -1,5 +1,5 @@
 ## Table of Contents
-- [ExpenTrackr](#ExpenTrackr)
+- [ExpenSys](#ExpenSys)
 - [Intuition](#intuition)
 - [Key Features](#key-features)
     - [Expense Logging](#expense-logging)
@@ -16,9 +16,9 @@
 - [Contribution Guidelines](#contribution-guidelines)
 
 
-# **ExpenTrackr**
+# **ExpenSys**
 
-**ExpenTrackr** is an efficient **expense tracking** application designed to help you manage your **finances** and maintain a detailed record of your **expenses**. Whether you are an individual looking to **budget** your personal **finances** or a **business owner** tracking **expenses**, **ExpenSys** streamlines the process for you.
+**ExpenSys** is an efficient **expense tracking** application designed to help you manage your **finances** and maintain a detailed record of your **expenses**. Whether you are an individual looking to **budget** your personal **finances** or a **business owner** tracking **expenses**, **ExpenSys** streamlines the process for you.
 
 ## Intuition
 I found it challenging to track my daily **expenses** using traditional methods such as Google Spreadsheets or existing **expense management apps**. They often lacked the flexibility and data organization I needed. As a result, I decided to develop **ExpenSys** to address these issues and create a more user-friendly **expense tracking** solution. Please feel free to submit **issues**, **feature requests** or **pull requests**; I'm open to accommodating them in future releases.

@@ -6,9 +6,9 @@
     - [Streamline the existing structure](#streamline-the-existing-structure)
 
 
-# **ExpenTrackr**
+# **ExpenSys**
 
-**ExpenTrackr** is an efficient **expense tracking** application designed to help you manage your **finances** and maintain a detailed record of your **expenses**. Whether you are an individual looking to **budget** your personal **finances** or a **business owner** tracking **expenses**, **ExpenSys** streamlines the process for you.
+**ExpenSys** is an efficient **expense tracking** application designed to help you manage your **finances** and maintain a detailed record of your **expenses**. Whether you are an individual looking to **budget** your personal **finances** or a **business owner** tracking **expenses**, **ExpenSys** streamlines the process for you.
 
 
 ## Upcoming features
