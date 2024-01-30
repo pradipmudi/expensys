@@ -18,15 +18,21 @@ repositories {
 dependencies {
     implementation 'org.springframework.boot:spring-boot-starter'
     implementation 'org.springframework.boot:spring-boot-starter-web'
+//    implementation 'org.springframework.boot:spring-boot-starter-security'
+//    implementation 'org.springframework.boot:spring-boot-starter-oauth2-client'
+    implementation 'org.springframework.boot:spring-boot-configuration-processor'
+    implementation 'org.springframework.boot:spring-boot-starter-actuator'
     implementation 'org.springframework.boot:spring-boot-starter-data-jpa:3.1.5'
+    implementation 'javax.xml.bind:jaxb-api:2.2.4'
+    implementation 'org.projectlombok:lombok:1.18.20'
     testImplementation 'org.springframework.boot:spring-boot-starter-test'
     implementation 'mysql:mysql-connector-java:8.0.27'
-//    testImplementation 'ch.qos.logback:logback-classic:1.4.11'
     implementation 'io.swagger.core.v3:swagger-annotations:2.2.14'
     implementation 'org.apache.commons:commons-text:1.10.0'
     implementation 'org.springframework.boot:spring-boot-starter-thymeleaf'
     implementation 'org.flywaydb:flyway-core'
     implementation 'org.flywaydb:flyway-mysql'
+    implementation 'io.jsonwebtoken:jjwt:0.12.3'
 
 }
 

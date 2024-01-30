@@ -28,7 +28,7 @@
         VEGETABLES_FRUITS_DAIRY_AND_MEAT: '🥦🍏🥛🥩', // Vegetables, Fruits, Dairy and Meat
         MEDICAL: '️💊', // Medicine and other medical expenses
         OUTSIDE_FOOD: '🍔', // Outside Food
-        LOSS_OF_MONEY: '💸', // Loss of Money
+        LOSE_OF_MONEY: '💸', // Loss of Money
         SALON_AND_COSMETICS: '💇‍♀️', // Salon and Beauty Products
         TRANSPORT: '🚗', // Transport related expenses
         SHOPPING: '🛍️', // Shopping

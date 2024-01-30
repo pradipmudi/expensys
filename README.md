@@ -1,5 +1,5 @@
 ## Table of Contents
-- [ExpenSys](#expensys)
+- [ExpenTrackr](#ExpenTrackr)
 - [Intuition](#intuition)
 - [Key Features](#key-features)
     - [Expense Logging](#expense-logging)
@@ -10,19 +10,15 @@
     - [User-Centric View](#user-centric-view)
     - [Subcategory Mapping](#subcategory-mapping)
     - [Database Integration](#database-integration)
-- [Upcoming features](#upcoming-features)
-    - [User Spend Percentage](#user-spend-percentage)
-    - [Google SSO](#google-sso-login)
-    - [Graphical Data Visualization](#graphical-data-visualization)
-    - [Streamline the existing structure](#streamline-the-existing-structure)
+
 - [API Contract](#expensys-openapi-contract)
 - [How to Use](#how-to-use)
 - [Contribution Guidelines](#contribution-guidelines)
 
 
-# **ExpenSys**
+# **ExpenTrackr**
 
-**ExpenSys** is an efficient **expense tracking** application designed to help you manage your **finances** and maintain a detailed record of your **expenses**. Whether you are an individual looking to **budget** your personal **finances** or a **business owner** tracking **expenses**, **ExpenSys** streamlines the process for you.
+**ExpenTrackr** is an efficient **expense tracking** application designed to help you manage your **finances** and maintain a detailed record of your **expenses**. Whether you are an individual looking to **budget** your personal **finances** or a **business owner** tracking **expenses**, **ExpenSys** streamlines the process for you.
 
 ## Intuition
 I found it challenging to track my daily **expenses** using traditional methods such as Google Spreadsheets or existing **expense management apps**. They often lacked the flexibility and data organization I needed. As a result, I decided to develop **ExpenSys** to address these issues and create a more user-friendly **expense tracking** solution. Please feel free to submit **issues**, **feature requests** or **pull requests**; I'm open to accommodating them in future releases.
@@ -55,33 +51,18 @@ I found it challenging to track my daily **expenses** using traditional methods 
 ### **Database Integration**
 - Users can add **expenses** directly into the database, ensuring data accuracy and easy retrieval.
 
-## Upcoming features
-
-### **User Spend Percentage**
-- As a potential future enhancement, **ExpenSys** aims to calculate and display **user spend percentages**, providing insights into financial distribution.
-
-### Google SSO Login
-- Users will be able to login and interact directly using Google SSO login
-
-### **Graphical Data Visualization**
-- While not currently implemented, **ExpenSys** has plans to introduce graphical data visualization features, making it even easier to interpret and analyze **expense data**.
-
-### **Streamline the existing structure**
-- Work in progress
-  - tests
-  - graph view for the expenses
-
 
 ## **How to Use**
 
-To get started with **ExpenSys**, follow these steps:
+To get started with **ExpenseTrackr**, follow these steps:
 
 1. Clone the repository.
 2. Set up the necessary **database** for **expense recording**.
-3. Run the application.
-4. Begin logging your daily **expenses** and utilize the various reporting and filtering options to manage your **financial data** effectively.
+3. Update DB configs on **application.yml**
+4. Run the application.
+5. Begin logging your daily **expenses** and utilize the various reporting and filtering options to manage your **financial data** effectively.
 
-Your feedback and contributions are valuable to us, and we look forward to enhancing **ExpenSys** further based on your needs.
+Your feedback and contributions are valuable to me, and I look forward to enhancing **ExpenTrackr** further based on your needs.
 
 ## **ExpenSys OpenAPI Contract**
 
@@ -96,6 +77,6 @@ The ExpenSys OpenAPI contract is the foundation for building applications that i
 
 ## Contribution Guidelines
 
-If you have any **feature requests** or would like to **contribute** to **ExpenSys**, please follow our contribution guidelines and submit **pull requests**. We are committed to continually improving the application to meet the diverse needs of our users.
+If you have any **feature requests** or would like to **contribute** to **ExpenSys**, please follow our contribution guidelines and submit **pull requests**. I'm committed to continually improving the application to meet the diverse needs of the users.
 
 Thank you for choosing **ExpenSys** for your **expense tracking** needs!

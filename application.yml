@@ -18,6 +18,13 @@ spring:
     suffix: .html
     cache: false
 
+#  security:
+#
+#    user:
+#      name: admin
+#      password: 180522
+
+
   flyway:
     baseline-on-migrate: true
   resources:

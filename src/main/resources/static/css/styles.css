@@ -15,6 +15,31 @@ body {
     line-height: 1.6;
 }
 
+/* Additions for Animations */
+/* Fade-in Animation */
+@keyframes fadeIn {
+    from {
+        opacity: 0;
+        transform: translateY(-20px);
+    }
+    to {
+        opacity: 1;
+        transform: translateY(0);
+    }
+}
+
+/* Card Animation */
+@keyframes cardAnimation {
+    from {
+        opacity: 0;
+        transform: scale(0.9);
+    }
+    to {
+        opacity: 1;
+        transform: scale(1);
+    }
+}
+
 /* General styles */
 .transactions {
     display: flex;
@@ -22,6 +47,7 @@ body {
     font-family: Arial, sans-serif;
     padding: 10px;
     box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1); /* Consistent box shadow */
+    animation: cardAnimation 0.5s ease-in-out both;
 }
 
 .transaction {
@@ -41,11 +67,14 @@ body {
 }
 
 /* Headings */
-h1, h2, h3 {
+h1,
+h2,
+h3 {
     text-align: center;
     margin-top: 20px;
     font-weight: 700; /* Adjusted font weight */
     line-height: 1.4; /* Improved line height */
+    animation: fadeIn 0.8s ease-in-out both;
 }
 
 h1 {
@@ -64,7 +93,6 @@ h2 {
 h3 {
     font-size: 1.0rem;
     margin: 0;
-    /* color: #3d5af1; */
 }
 
 /* Form elements */
@@ -113,6 +141,7 @@ button {
     transition: background-color 0.3s ease-in-out, color 0.3s ease-in-out, transform 0.3s ease-in-out, box-shadow 0.3s ease-in-out, border-color 0.3s ease-in-out;
     background-color: #3d5af1;
     color: #fff;
+    animation: fadeIn 0.5s ease-in-out both;
 }
 
 button:hover {
@@ -157,6 +186,7 @@ button:hover {
     max-width: 100%;
     margin: 20px 20px 0;
     box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+    animation: cardAnimation 0.5s ease-in-out both;
 }
 
 table {
@@ -171,7 +201,8 @@ table {
     table-layout: fixed;
 }
 
-th, td {
+th,
+td {
     padding: 12px;
     text-align: left;
     border-bottom: 1px solid #ccc;
@@ -211,7 +242,8 @@ tr:hover {
         border-collapse: collapse;
     }
 
-    th, td {
+    th,
+    td {
         font-size: 0.9rem;
         padding: 12px; /* Increased padding for better touch interaction */
         text-align: left;
@@ -269,5 +301,23 @@ tr:hover {
 
     h2 {
         font-size: 1.3rem;
+    }
+
+    h1,
+    h2,
+    h3 {
+    /* ... (existing styles) */
+        animation: fadeIn 0.8s ease-in-out both;
+    }
+
+    button {
+    /* ... (existing styles) */
+        animation: fadeIn 0.5s ease-in-out both;
+    }
+
+    .transactions,
+    .table-wrapper {
+    /* ... (existing styles) */
+        animation: cardAnimation 0.5s ease-in-out both;
     }
 }
