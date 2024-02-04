@@ -30,13 +30,15 @@ For this, I've made the UI from scratch as well and it's a responsive design. Fe
 ### Monthly Report
 #### **By Main category and spent by user**
 ![Screen Shot 2024-01-30 at 19 52 08](https://github.com/pradipmudi/expensys/assets/6489613/e5d0f9de-fa55-455a-9fcf-8eb4d337ca05)
-![Screen Shot 2024-01-30 at 19 38 14](https://github.com/pradipmudi/expensys/assets/6489613/d6827927-375a-458d-a5fc-0ceb7b88e288)
+
 #### **By Sub category and spent by user**
 ![Screen Shot 2024-01-30 at 19 33 25](https://github.com/pradipmudi/expensys/assets/6489613/d8e30e90-82fe-41bd-99ce-2da946a357b7)
-![Screen Shot 2024-01-30 at 19 30 26](https://github.com/pradipmudi/expensys/assets/6489613/21781599-a1aa-4382-8fe4-1bd88475d859)
+![Screen Shot 2024-01-30 at 19 38 14](https://github.com/pradipmudi/expensys/assets/6489613/d6827927-375a-458d-a5fc-0ceb7b88e288)
+
 
 #### **By Sub category and spent by all**
 ![Screen Shot 2024-01-30 at 19 30 12](https://github.com/pradipmudi/expensys/assets/6489613/2607f71a-ac61-474b-8c43-e7841979747e)
+![Screen Shot 2024-01-30 at 19 30 26](https://github.com/pradipmudi/expensys/assets/6489613/21781599-a1aa-4382-8fe4-1bd88475d859)
 
 **Generated the logo for my application from here:** https://app.logo.com/dashboard/
 
