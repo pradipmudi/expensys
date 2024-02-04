@@ -20,6 +20,19 @@
 
 **ExpenSys** is an efficient **expense tracking** application designed to help you manage your **finances** and maintain a detailed record of your **expenses**. Whether you are an individual looking to **budget** your personal **finances** or a **business owner** tracking **expenses**, **ExpenSys** streamlines the process for you.
 
+For this, I've made the UI from scratch as well and it's a responsive design. Few screenshots from the application.
+![Screen Shot 2024-01-30 at 19 38 14](https://github.com/pradipmudi/expensys/assets/6489613/f7aa06b2-2a85-463a-8752-bd21f4ef986a)
+![Screen Shot 2024-01-30 at 19 33 25](https://github.com/pradipmudi/expensys/assets/6489613/3ac4f2a3-fe99-45a2-8426-36855f02a0fb)
+![Screen Shot 2024-01-30 at 19 30 26](https://github.com/pradipmudi/expensys/assets/6489613/8e3ff050-62c6-46cf-923d-b826e9f646ba)
+![Screen Shot 2024-01-30 at 19 30 12](https://github.com/pradipmudi/expensys/assets/6489613/9f5e7c15-5af2-4e8a-bd41-e7624b5f2b81)
+![Screenshot 2024-01-30 at 7 34 01 PM](https://github.com/pradipmudi/expensys/assets/6489613/aeb5e239-b1da-44e9-9ba0-dddd85d7b659)
+![Screenshot 2024-01-30 at 7 44 15 PM](https://github.com/pradipmudi/expensys/assets/6489613/16bcc45d-fe49-47f0-83f0-3d76d8a06bba)
+![Screen Shot 2024-01-30 at 19 45 36](https://github.com/pradipmudi/expensys/assets/6489613/69e8b80e-ac48-450b-9e6a-a1d92015d243)
+![Screenshot 2024-01-30 at 7 49 43 PM](https://github.com/pradipmudi/expensys/assets/6489613/d400dcff-06cf-4650-8909-d0b02ab4f235)
+![Screen Shot 2024-01-30 at 19 52 08](https://github.com/pradipmudi/expensys/assets/6489613/e654306f-0007-44fe-a550-601de481e58f)
+
+**Generated the logo for my application from here:** https://app.logo.com/dashboard/
+
 ## Intuition
 I found it challenging to track my daily **expenses** using traditional methods such as Google Spreadsheets or existing **expense management apps**. They often lacked the flexibility and data organization I needed. As a result, I decided to develop **ExpenSys** to address these issues and create a more user-friendly **expense tracking** solution. Please feel free to submit **issues**, **feature requests** or **pull requests**; I'm open to accommodating them in future releases.
 
@@ -63,6 +76,13 @@ To get started with **ExpenseTrackr**, follow these steps:
 5. Begin logging your daily **expenses** and utilize the various reporting and filtering options to manage your **financial data** effectively.
 
 Your feedback and contributions are valuable to me, and I look forward to enhancing **ExpenTrackr** further based on your needs.
+### **How to use the app in your local?**
+These are the UI endpoints:
+- **Add expense:** http://localhost:8080/new
+- **View report:** http://localhost:8080/
+- **View Expenses** http://localhost:8080/expenses
+
+**Current TODO:** I plan to make the design more user friendly by creating a panel to redirect to the above pages. Please feel free to raise an PR on the same if you've already.
 
 ## **ExpenSys OpenAPI Contract**
 
