@@ -26,8 +26,9 @@ For this, I've made the UI from scratch as well and it's a responsive design. Fe
 ![Screenshot 2024-01-30 at 7 34 01 PM](https://github.com/pradipmudi/expensys/assets/6489613/c7f56fc5-314a-4369-85e4-be69f8e89665)
 
 ### **View expenses**
-![Screenshot 2024-01-30 at 7 44 15 PM](https://github.com/pradipmudi/expensys/assets/6489613/ca1eb21e-3363-4a6d-8d48-470a43bc9bcd)
+![Screenshot 2024-01-30 at 7 44 15 PM](https://github.com/pradipmudi/expensys/assets/6489613/09a2ced6-0219-4727-b3be-a613d347fa0e)
 ![Screen Shot 2024-01-30 at 19 45 36](https://github.com/pradipmudi/expensys/assets/6489613/2f7ef909-50d7-41ad-be4b-77dabe43feb2)
+
 ### Monthly Report
 #### **By Main category and spent by user**
 ![Screen Shot 2024-01-30 at 19 52 08](https://github.com/pradipmudi/expensys/assets/6489613/e5d0f9de-fa55-455a-9fcf-8eb4d337ca05)
