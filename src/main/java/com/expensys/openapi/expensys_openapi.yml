@@ -5,6 +5,22 @@ info:
 servers:
   - url: http://localhost:8080
 paths:
+  /save:
+    post:
+      summary: Save an Expense
+      operationId: saveExpense
+      requestBody:
+        description: New Expense details
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/NewExpense'
+      responses:
+        '200':
+          description: Expense saved successfully
+        '500':
+          description: Internal Server Error
   /report:
     get:
       summary: Retrieve Report Data for Expenses by Month, Year, User, Main Category, and Subcategory
@@ -291,3 +307,42 @@ components:
         spentBy:
           type: string
           example: "user1"
+    NewExpense:
+      type: object
+      properties:
+        date:
+          type: string
+          format: date
+          description: Date of the expense
+          example: 2024-02-03
+        item:
+          type: string
+          description: Item description
+          example: rice and multigrain flour
+        category:
+          $ref: '#/components/schemas/Category'
+        spent:
+          type: number
+          format: double
+          description: Amount spent
+          example: 500
+        spentBy:
+          type: string
+          description: Person who spent the amount
+          example: Alice
+    Category:
+      type: string
+      description: Expense category
+      enum:
+          - GROCERIES
+          - VEGETABLES_FRUITS_DAIRY_AND_MEAT
+          - MEDICAL
+          - SALON_AND_COSMETICS
+          - TRANSPORT
+          - SHOPPING
+          - OUTSIDE_FOOD
+          - LOSE_OF_MONEY
+          - ENTERTAINMENT
+          - RENT_AND_OTHER_BILLS
+          - INVESTMENTS
+          - OTHERS
