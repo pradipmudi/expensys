@@ -22,8 +22,9 @@
 
 For this, I've made the UI from scratch as well and it's a responsive design. Few screenshots from the application.
 ### **Add Expense**
-![Screenshot 2024-01-30 at 7 34 01 PM](https://github.com/pradipmudi/expensys/assets/6489613/cdd600bc-c566-45fd-a376-2e2d22d4d7cb)
-![Screenshot 2024-01-30 at 7 49 43 PM](https://github.com/pradipmudi/expensys/assets/6489613/487f6976-9b11-4e0a-8310-aab240e90f33)
+![Screenshot 2024-01-30 at 7 49 43 PM](https://github.com/pradipmudi/expensys/assets/6489613/9d28d84b-eadc-4d49-868d-21578f8eed33)
+![Screenshot 2024-01-30 at 7 34 01 PM](https://github.com/pradipmudi/expensys/assets/6489613/c7f56fc5-314a-4369-85e4-be69f8e89665)
+
 ### **View expenses**
 ![Screenshot 2024-01-30 at 7 44 15 PM](https://github.com/pradipmudi/expensys/assets/6489613/ca1eb21e-3363-4a6d-8d48-470a43bc9bcd)
 ![Screen Shot 2024-01-30 at 19 45 36](https://github.com/pradipmudi/expensys/assets/6489613/2f7ef909-50d7-41ad-be4b-77dabe43feb2)
