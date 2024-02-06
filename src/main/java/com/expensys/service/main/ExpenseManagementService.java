@@ -62,6 +62,8 @@ public class ExpenseManagementService {
         int startIndex = (page-1) * itemsPerPage;
         int endIndex = startIndex+itemsPerPage;
 
+        if(endIndex > sortedExpenses.size()) endIndex = sortedExpenses.size();
+
         if(startIndex > sortedExpenses.size() || endIndex > sortedExpenses.size()){
             throw new RuntimeException("No data available for pageNo: "+page);
         }

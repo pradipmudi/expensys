@@ -146,10 +146,10 @@ function fetchExpenseData() {
 
         renderTransactions(data);
 
-        nextPageButtonTop.disabled = data.length < itemsPerPage;
-        nextPageButtonBottom.disabled = data.length < itemsPerPage;
+        nextPageButtonTop.disabled = data.length == 0;
+        nextPageButtonBottom.disabled = data.length == 0;
 
-        if (data.length >= itemsPerPage) {
+        if (data.length > 0) {
             updateCurrentPageElement();
         } else {
             nextPageButtonTop.disabled = true;
