@@ -151,9 +151,15 @@ function fetchExpenseData() {
 
         if (data.length > 0) {
             updateCurrentPageElement();
-        } else {
+        }
+        if(data.length < 10 || data.length == 0) {
             nextPageButtonTop.disabled = true;
             nextPageButtonBottom.disabled = true;
+            if(data.length == 0){
+                console.error('Error fetching data:', error);
+                errorMessage.innerHTML = `No data available or there was some error fetching data. Please try again.<br>Error: ${error.message}`;
+                errorMessage.style.display = 'block';
+            }
         }
     })
         .catch(error => {
