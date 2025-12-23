@@ -10,10 +10,13 @@ import com.expensys.repository.ExpenseRepository;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.PageRequest;
+import org.springframework.data.domain.Pageable;
+import org.springframework.data.domain.Sort;
 import org.springframework.stereotype.Service;
 
 import java.time.LocalDate;
-import java.time.format.DateTimeFormatter;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -38,24 +41,75 @@ public class ExpenseService {
     }
 
     public List<ExpenseEntity> getExpenseEntitiesByMonthAndYear(Integer year, Month month){
-        year = requireNonNullElseGet(year, () -> LocalDate.now().getYear()); // You can use the current year or specify a year as needed
-        DateTimeFormatter formatter = DateTimeFormatter.ofPattern("yyyy-MM-dd");
+        year = requireNonNullElseGet(year, () -> LocalDate.now().getYear());
+        
+        LocalDate[] dateRange = calculateDateRange(year, month);
+        return expenseRepository.findByDateBetween(dateRange[0], dateRange[1]);
+    }
 
-        // Create the LocalDate for the start of the month
-        LocalDate dateStart = LocalDate.parse(LocalDate.of(year, Integer.valueOf(month.getMonthValue()), 1).format(formatter));
+    public List<ExpenseEntity> getExpensesByMonth(Integer year, Month month, Integer page, Integer itemsPerPage, String sortField, String sortOrder) {
+        year = requireNonNullElseGet(year, () -> LocalDate.now().getYear());
 
-        // Create the LocalDate for the end of the month
-        LocalDate dateEnd = LocalDate.parse(dateStart.plusMonths(1).minusDays(1).format(formatter));
-        return expenseRepository.findByDateBetween(dateStart, dateEnd);
+        if (page == null || itemsPerPage == null) {
+             return getExpenseEntitiesByMonthAndYear(year, month);
+        }
+
+        LocalDate[] dateRange = calculateDateRange(year, month);
+        LocalDate dateStart = dateRange[0];
+        LocalDate dateEnd = dateRange[1];
+
+        Sort sort = Sort.by(Sort.Direction.DESC, "date");
+        if (sortField != null && !sortField.isEmpty()) {
+             Sort.Direction direction = "asc".equalsIgnoreCase(sortOrder) ? Sort.Direction.ASC : Sort.Direction.DESC;
+             String entityField = mapSortField(sortField);
+             sort = Sort.by(direction, entityField);
+        } else {
+             sort = sort.and(Sort.by(Sort.Direction.DESC, "id"));
+        }
+
+        Pageable pageable = PageRequest.of(page - 1, itemsPerPage, sort);
+        Page<ExpenseEntity> expensePage = expenseRepository.findByDateBetween(dateStart, dateEnd, pageable);
+        
+        return expensePage.getContent();
+    }
+
+    private LocalDate[] calculateDateRange(Integer year, Month month) {
+        LocalDate dateStart;
+        LocalDate dateEnd;
+
+        if (Month.ALL.equals(month)) {
+            dateStart = LocalDate.of(year, 1, 1);
+            dateEnd = LocalDate.of(year, 12, 31);
+        } else {
+            dateStart = LocalDate.of(year, Integer.parseInt(month.getMonthValue()), 1);
+            dateEnd = dateStart.withDayOfMonth(dateStart.lengthOfMonth());
+        }
+        return new LocalDate[]{dateStart, dateEnd};
+    }
+
+    private String mapSortField(String frontendField) {
+        if (frontendField == null) return "date";
+        switch (frontendField.toLowerCase()) {
+            case "item": return "item";
+            case "category": return "category";
+            case "spent": return "spent";
+            case "spentby": return "spentBy";
+            case "date": return "date";
+            default: return "date";
+        }
     }
 
     private List<Expense> prepareExpenseListFromExpenseEntityList(List<ExpenseEntity> expenseEntityList, ReportRequest reportRequest) {
         List<Expense> expenseList = new ArrayList<>();
         for (ExpenseEntity expenseEntity : expenseEntityList) {
-            Category expenseCategory = Category.valueOf(expenseEntity.getCategory().toUpperCase().replaceAll("\\s", "_"));
-            Category category = Category.MAIN.equals(reportRequest.getCategory()) ? SUB_TO_MAIN_CATEGORY_MAPPINGS.get(expenseCategory) : expenseCategory;
-            Expense expense = new Expense(Month.valueOf(String.valueOf(expenseEntity.getDate().getMonth())), expenseEntity.getItem(), category, expenseEntity.getSpent(), expenseEntity.getSpentBy());
-            expenseList.add(expense);
+            try {
+                Category expenseCategory = Category.valueOf(expenseEntity.getCategory().toUpperCase().replaceAll("\\s", "_"));
+                Category category = Category.MAIN.equals(reportRequest.getCategory()) ? SUB_TO_MAIN_CATEGORY_MAPPINGS.get(expenseCategory) : expenseCategory;
+                Expense expense = new Expense(Month.valueOf(String.valueOf(expenseEntity.getDate().getMonth())), expenseEntity.getItem(), category, expenseEntity.getSpent(), expenseEntity.getSpentBy());
+                expenseList.add(expense);
+            } catch (IllegalArgumentException e) {
+                logger.warn("Skipping expense with invalid category: {}", expenseEntity.getCategory());
+            }
         }
         return expenseList;
     }
@@ -69,6 +123,12 @@ public class ExpenseService {
     }
 
     public void saveExpense(NewExpense newExpense) {
+        if (newExpense.getSpent() == null || newExpense.getSpent() < 0) {
+            throw new IllegalArgumentException("Spent amount must be positive");
+        }
+        if (newExpense.getItem() == null || newExpense.getItem().trim().isEmpty()) {
+            throw new IllegalArgumentException("Item name cannot be empty");
+        }
         expenseRepository.save(prepareExpenseEntity(newExpense));
     }
 
@@ -83,9 +143,8 @@ public class ExpenseService {
     }
 
     public List<Expense> getAllExpensesByYear(int year, ReportRequest reportRequest) {
-        DateTimeFormatter formatter = DateTimeFormatter.ofPattern("yyyy-MM-dd");
-        LocalDate yearStart = LocalDate.parse(LocalDate.of(year, 1, 1).format(formatter)); // January 1st of the specified year
-        LocalDate yearEnd = LocalDate.parse(LocalDate.of(year, 12, 31).format(formatter)); // December 31st of the specified year
+        LocalDate yearStart = LocalDate.of(year, 1, 1);
+        LocalDate yearEnd = LocalDate.of(year, 12, 31);
         List<ExpenseEntity> expenseEntityList = expenseRepository.findByDateBetween(yearStart, yearEnd);
         return prepareExpenseListFromExpenseEntityList(expenseEntityList, reportRequest);
     }

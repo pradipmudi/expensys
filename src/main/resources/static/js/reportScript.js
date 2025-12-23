@@ -1,11 +1,17 @@
 
+document.addEventListener('DOMContentLoaded', function() {
+    // --- DOM Elements ---
     const yearFilter = document.getElementById("year-filter");
     const monthFilter = document.getElementById("month-filter");
     const categoryFilter = document.getElementById("category-filter");
     const spentByFilter = document.getElementById("spent-by-filter");
     const monthlyReport = document.getElementById("monthly-report");
+
+    // --- State ---
     let currentSortField = null;
     let currentSortOrder = 1;
+
+    // --- Mappings ---
     const categoryKeyToLabelMappings = {
         GROCERIES: 'Groceries',
         VEGETABLES_FRUITS_DAIRY_AND_MEAT: 'Vegetables, Fruits, Dairy and Meat',
@@ -24,57 +30,70 @@
     };
 
     const categoryKeyToEmojiMappings = {
-        GROCERIES: '🛒', // Groceries
-        VEGETABLES_FRUITS_DAIRY_AND_MEAT: '🥦🍏🥛🥩', // Vegetables, Fruits, Dairy and Meat
-        MEDICAL: '️💊', // Medicine and other medical expenses
-        OUTSIDE_FOOD: '🍔', // Outside Food
-        LOSE_OF_MONEY: '💸', // Loss of Money
-        SALON_AND_COSMETICS: '💇‍♀️', // Salon and Beauty Products
-        TRANSPORT: '🚗', // Transport related expenses
-        SHOPPING: '🛍️', // Shopping
-        ENTERTAINMENT: '🎬', // Entertainment
-        RENT_AND_OTHER_BILLS: '🏠', // Rent and Other Bills
-        INVESTMENTS: '💼', // Investments
-        ESSENTIAL: '🆘', // Essentials
-        EXPENSE: '💰', // Expense
-        OTHERS: '🌟' // Others
+        GROCERIES: '🛒',
+        VEGETABLES_FRUITS_DAIRY_AND_MEAT: '🥦🍏🥛🥩',
+        MEDICAL: '️💊',
+        OUTSIDE_FOOD: '🍔',
+        LOSE_OF_MONEY: '💸',
+        SALON_AND_COSMETICS: '💇‍♀️',
+        TRANSPORT: '🚗',
+        SHOPPING: '🛍️',
+        ENTERTAINMENT: '🎬',
+        RENT_AND_OTHER_BILLS: '🏠',
+        INVESTMENTS: '💼',
+        ESSENTIAL: '🆘',
+        EXPENSE: '💰',
+        OTHERS: '🌟'
     };
 
-
-
-
-    // Function to fetch and update the data based on filters
+    // --- Functions ---
     async function updateReport() {
         try {
-            const selectedYear = yearFilter.value;
+            let selectedYear = yearFilter.value;
             const selectedMonth = monthFilter.value;
             const selectedCategory = categoryFilter.value;
             const selectedSpentBy = spentByFilter.value;
 
-            // Make an API request based on selected filters
-            const apiUrl = `http://localhost:8080/expense/report?year=${selectedYear}&month=${selectedMonth}&category=${selectedCategory}&spentBy=${selectedSpentBy}`;
+            // SELF-HEALING LOGIC: If year is missing, default to current year
+            if (!selectedYear) {
+                selectedYear = new Date().getFullYear();
+                if (yearFilter.options.length > 0) {
+                    yearFilter.value = selectedYear;
+                }
+            }
+
+            const apiUrl = `/expense/report?year=${selectedYear}&month=${selectedMonth}&category=${selectedCategory}&spentBy=${selectedSpentBy}`;
             const response = await fetch(apiUrl);
 
             if (!response.ok) {
-                throw new Error(`No data available or API request failed with status: ${response.status}`);
+                throw new Error(`API request failed with status: ${response.status}`);
             }
 
-            const data = await response.json();
+            const apiResponse = await response.json();
+            
+            let data = [];
+            if (apiResponse.success) {
+                data = apiResponse.data;
+            } else {
+                throw new Error(apiResponse.message || "Unknown error occurred");
+            }
 
-            // Clear previous data
             monthlyReport.innerHTML = "";
 
-            // Show data for the selected months
-            data.forEach(monthData => {
-                const reportCard = createReportCard(monthData, selectedSpentBy);
-                monthlyReport.appendChild(reportCard);
-            });
+            if (data.length === 0) {
+                monthlyReport.innerHTML = "<p>No report data available for the selected filters.</p>";
+            } else {
+                data.forEach(monthData => {
+                    const reportCard = createReportCard(monthData, selectedSpentBy);
+                    monthlyReport.appendChild(reportCard);
+                });
+            }
         } catch (error) {
             console.error(error);
+            monthlyReport.innerHTML = `<p style="color: red;">Error loading report: ${error.message}</p>`;
         }
     }
 
-    // Function to create a report card
     function createReportCard(data, selectedSpentBy) {
         const reportCard = document.createElement("div");
         reportCard.className = "report-card";
@@ -85,75 +104,97 @@
             <table>
                 <thead>
                     <tr>
-                        <th class="sortable" data-field="category" onclick="sortColumn('category')">Category
-                            <span class="sort-icon" id="sort-category-icon">
-                                ${currentSortField === 'category' ? (currentSortOrder === 1 ? '▲' : '▼') : ''}
-                            </span>
+                        <th class="sortable" data-field="category">Category
+                            <span class="sort-icon" id="sort-category-icon"></span>
                         </th>
-                        <th class="sortable" data-field="spent" onclick="sortColumn('spent')">Spent
-                            <span class="sort-icon" id="sort-spent-icon">
-                                ${currentSortField === 'spent' ? (currentSortOrder === 1 ? '▲' : '▼') : ''}
-                            </span>
+                        <th class="sortable" data-field="spent">Spent
+                            <span class="sort-icon" id="sort-spent-icon"></span>
                         </th>
-                        ${selectedSpentBy === "ALL" ? "" : `<th class="sortable" data-field="spentBy" onclick="sortColumn('spentBy')">Spent By
-                            <span class="sort-icon" id="sort-spentBy-icon">
-                                ${currentSortField === 'spentBy' ? (currentSortOrder === 1 ? '▲' : '▼') : ''}
-                            </span>
+                        ${selectedSpentBy === "ALL" ? "" : `<th class="sortable" data-field="spentBy">Spent By
+                            <span class="sort-icon" id="sort-spentBy-icon"></span>
                         </th>`}
                     </tr>
                 </thead>
                 <tbody>
                     ${sortReportData(data.reportInfo, selectedSpentBy).map(info => `
                         <tr>
-                            <td>${categoryKeyToEmojiMappings[info.subCategory]} ${categoryKeyToLabelMappings[info.subCategory]}</td>
+                            <td>${categoryKeyToEmojiMappings[info.subCategory] || '🏷️'} ${categoryKeyToLabelMappings[info.subCategory] || info.subCategory}</td>
                             <td>₹${parseFloat(info.spent).toFixed(2)}</td>
                             ${selectedSpentBy === "ALL" ? "" : `<td>${info.spentBy}</td>`}
                         </tr>
                     `).join('')}
                 </tbody>
             </table>`;
+        
+        // Add event listeners for sorting after the card is created
+        reportCard.querySelector('[data-field="category"]').addEventListener('click', () => sortColumn('category'));
+        reportCard.querySelector('[data-field="spent"]').addEventListener('click', () => sortColumn('spent'));
+        if (selectedSpentBy !== "ALL") {
+            reportCard.querySelector('[data-field="spentBy"]').addEventListener('click', () => sortColumn('spentBy'));
+        }
 
         return reportCard;
     }
 
-    // Function to sort column and update sorting icon
     function sortColumn(field) {
         if (currentSortField === field) {
-            currentSortOrder *= -1; // Toggle between ascending and descending
+            currentSortOrder *= -1;
         } else {
             currentSortField = field;
-            currentSortOrder = 1; // Set to ascending by default
+            currentSortOrder = 1;
         }
-
-        // Update the sort icons based on the sort order
-        const sortIcons = document.querySelectorAll(".sort-icon");
-        sortIcons.forEach(icon => (icon.textContent = ''));
-
-        // Update the icon for the clicked column
-        const icon = document.getElementById(`sort-${field}-icon`);
-        icon.textContent = currentSortOrder === 1 ? '▲' : '▼';
-
         updateReport();
     }
 
-    // Function to sort report data based on the selected field
     function sortReportData(reportInfo, selectedSpentBy) {
-        if (currentSortField === 'category') {
-            return reportInfo.slice().sort((a, b) => a.subCategory.localeCompare(b.subCategory) * currentSortOrder);
-        } else if (currentSortField === 'spent') {
-            return reportInfo.slice().sort((a, b) => (a.spent - b.spent) * currentSortOrder);
-        } else if (currentSortField === 'spentBy') {
-            return reportInfo.slice().sort((a, b) => a.spentBy.localeCompare(b.spentBy) * currentSortOrder);
-        } else {
-            return reportInfo;
-        }
+        if (!currentSortField) return reportInfo;
+
+        return [...reportInfo].sort((a, b) => {
+            let valA, valB;
+            switch (currentSortField) {
+                case 'category':
+                    valA = a.subCategory;
+                    valB = b.subCategory;
+                    return valA.localeCompare(valB) * currentSortOrder;
+                case 'spent':
+                    valA = a.spent;
+                    valB = b.spent;
+                    return (valA - valB) * currentSortOrder;
+                case 'spentBy':
+                    valA = a.spentBy;
+                    valB = b.spentBy;
+                    return valA.localeCompare(valB) * currentSortOrder;
+                default:
+                    return 0;
+            }
+        });
     }
 
-    // Listen for changes in filters and update the report
-    monthFilter.addEventListener("change", updateReport);
-    categoryFilter.addEventListener("change", updateReport);
-    spentByFilter.addEventListener("change", updateReport);
-    yearFilter.addEventListener("change", updateReport);
+    // --- Initial Setup ---
+    function initialize() {
+        // 1. Populate Years
+        const currentYear = new Date().getFullYear();
+        const startYear = 2022;
+        yearFilter.innerHTML = '';
+        for (let year = currentYear; year >= startYear; year--) {
+            const option = document.createElement('option');
+            option.value = year;
+            option.textContent = year;
+            yearFilter.appendChild(option);
+        }
+        
+        // Set value explicitly
+        yearFilter.value = currentYear;
 
-    // Initial update
-    updateReport();
+        // 2. Add Event Listeners
+        yearFilter.addEventListener("change", updateReport);
+        monthFilter.addEventListener("change", updateReport);
+        categoryFilter.addEventListener("change", updateReport);
+        spentByFilter.addEventListener("change", updateReport);
+        
+        // 3. Initial data load
+        updateReport();
+    }
+
+    initialize();
+});
