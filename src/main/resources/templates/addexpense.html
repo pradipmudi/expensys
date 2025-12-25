@@ -2,13 +2,15 @@
 <html lang="en" xmlns:th="http://www.w3.org/1999/xhtml">
 <head>
     <title>Expense Entry Form</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <!-- Link to global styles -->
+    <link th:href="@{/css/styles.css}" rel="stylesheet" type="text/css" >
     <style>
+        /* Page-specific overrides */
         body {
-            font-family: Arial, sans-serif;
-            background-color: #f7f7f7;
-            margin: 0;
-            padding: 0;
-            /* Removed flexbox to allow header to span full width */
+            display: flex;
+            flex-direction: column;
+            align-items: center;
             min-height: 100vh;
         }
 
@@ -20,14 +22,18 @@
             width: 90%;
             max-width: 500px;
             text-align: center;
-            /* Center the container horizontally and add top margin */
             margin: 40px auto;
+            /* Animation from global styles */
+            animation: cardAnimation 0.5s ease-in-out both;
         }
 
-        h1 {
-            color: #3498db;
-            font-size: 28px;
-            margin-bottom: 20px;
+        /* Mobile Optimization */
+        @media (max-width: 600px) {
+            .container {
+                width: 95%;
+                padding: 20px;
+                margin: 20px auto;
+            }
         }
 
         form {
@@ -36,9 +42,10 @@
 
         label {
             font-weight: bold;
-            margin-top: 10px;
+            margin-top: 15px;
             display: block;
-            font-size: 18px;
+            font-size: 1rem;
+            color: #333;
         }
 
         input[type="date"],
@@ -49,50 +56,74 @@
             padding: 12px;
             margin: 5px 0;
             border: 1px solid #ccc;
-            border-radius: 5px;
-            font-size: 16px;
-            transition: border-color 0.3s;
+            border-radius: 8px;
+            font-size: 1rem;
+            transition: border-color 0.3s, box-shadow 0.3s;
             box-sizing: border-box;
+            background: #f9fafb;
+            min-height: 48px; /* Ensure touch target is large enough */
+        }
+
+        /*
+           UNIVERSAL MOBILE DATE PICKER FIX
+           This CSS trick makes the date input behave consistently across Firefox, Chrome, and Safari.
+        */
+        input[type="date"] {
+            position: relative;
+            /* Ensure text is visible */
+            color: #333;
+        }
+
+        /* For WebKit (Chrome, Safari) */
+        input[type="date"]::-webkit-calendar-picker-indicator {
+            position: absolute;
+            top: 0;
+            left: 0;
+            right: 0;
+            bottom: 0;
+            width: 100%;
+            height: 100%;
+            opacity: 0;
+            cursor: pointer;
+        }
+
+        /* For Firefox: Make the input take up the full width/height so tapping it triggers the UI */
+        input[type="date"] {
+            -moz-appearance: textfield;
         }
 
         input[type="date"]:focus,
         select:focus,
         input[type="text"]:focus,
         input[type="number"]:focus {
-            border-color: #3498db;
+            border-color: #3d5af1;
+            box-shadow: 0 0 8px rgba(61, 90, 241, 0.3);
             outline: none;
         }
 
         input[type="submit"] {
-            background-color: #3498db;
+            background-color: #3d5af1;
             color: #fff;
             border: none;
             padding: 14px 20px;
-            border-radius: 5px;
+            border-radius: 8px;
             cursor: pointer;
-            font-size: 18px;
-            transition: background-color 0.3s;
+            font-size: 1.1rem;
+            font-weight: 600;
+            transition: background-color 0.3s, transform 0.2s;
             width: 100%;
-            margin-top: 20px;
+            margin-top: 25px;
         }
 
         input[type="submit"]:hover {
             background-color: #2980b9;
+            transform: translateY(-2px);
         }
 
         .select-wrapper {
             position: relative;
             display: inline-block;
             width: 100%;
-        }
-
-        select {
-            appearance: none;
-            -webkit-appearance: none;
-            -moz-appearance: none;
-            width: 100%;
-            cursor: pointer;
-            background-color: white;
         }
 
         .select-icon {
@@ -103,6 +134,40 @@
             pointer-events: none;
             color: #555;
         }
+
+        /* TOAST NOTIFICATION STYLES */
+        #toast {
+            visibility: hidden;
+            min-width: 250px;
+            background-color: #333;
+            color: #fff;
+            text-align: center;
+            border-radius: 8px;
+            padding: 16px;
+            position: fixed;
+            z-index: 1000;
+            left: 50%;
+            bottom: 30px;
+            transform: translateX(-50%);
+            font-size: 1rem;
+            box-shadow: 0 4px 12px rgba(0,0,0,0.3);
+            opacity: 0;
+            transition: opacity 0.5s, bottom 0.5s;
+        }
+
+        #toast.show {
+            visibility: visible;
+            opacity: 1;
+            bottom: 50px; /* Slide up effect */
+        }
+
+        #toast.success {
+            background-color: #27ae60; /* Green for success */
+        }
+
+        #toast.error {
+            background-color: #e74c3c; /* Red for error */
+        }
     </style>
 </head>
 <body>
@@ -112,13 +177,13 @@
 
 <div class="container">
     <form id="expenseForm" action="/expense/save" method="post">
-        <label for="date">Date:</label>
+        <label for="date">Date</label>
         <input type="date" id="date" name="date" required>
 
-        <label for="item">Item:</label>
+        <label for="item">Item</label>
         <input type="text" id="item" name="item" placeholder="e.g., Weekly Groceries" required>
 
-        <label for="subCategory">Category:</label>
+        <label for="subCategory">Category</label>
         <div class="select-wrapper">
             <select id="subCategory" name="subCategory" required>
                 <option value="" disabled selected>-- Select Category --</option>
@@ -127,15 +192,19 @@
             <div class="select-icon">&#9660;</div>
         </div>
 
-        <label for="spent">Spent (Amount):</label>
+        <label for="spent">Spent (Amount)</label>
         <input type="number" id="spent" name="spent" step="0.01" placeholder="0.00" required>
 
-        <label for="user">User (Spent By):</label>
+        <label for="user">User (Spent By)</label>
         <input type="text" id="user" name="user" placeholder="Name" required>
 
-        <input type="submit" value="Submit">
+        <input type="submit" value="Save Expense">
     </form>
 </div>
+
+<!-- The Toast Notification Element -->
+<div id="toast">Some text some message..</div>
+
 <script>
     document.addEventListener('DOMContentLoaded', function() {
         // 1. Set Default Date to Today
@@ -143,7 +212,18 @@
         const today = new Date().toISOString().split('T')[0];
         dateInput.value = today;
 
-        // 2. Fetch Categories
+        // 2. Force Calendar Open (Simplified)
+        dateInput.addEventListener('click', function(e) {
+            if ('showPicker' in HTMLInputElement.prototype) {
+                try {
+                    this.showPicker();
+                } catch (error) {
+                    // Ignore errors
+                }
+            }
+        });
+
+        // 3. Fetch Categories
         fetch('/category/all')
             .then(response => response.json())
             .then(categories => {
@@ -175,6 +255,18 @@
             .catch(error => console.error('Error fetching categories:', error));
     });
 
+    // Toast Function
+    function showToast(message, type) {
+        const toast = document.getElementById("toast");
+        toast.textContent = message;
+        toast.className = "show " + type; // Add 'show' and type class (success/error)
+
+        // Hide after 3 seconds
+        setTimeout(function(){
+            toast.className = toast.className.replace("show", "");
+        }, 3000);
+    }
+
     document.getElementById("expenseForm").addEventListener("submit", function (event) {
         event.preventDefault();
 
@@ -197,16 +289,19 @@
         })
         .then(response => {
             if (response.status === 200) {
-                alert("Expense saved successfully!");
+                // REPLACED ALERT WITH TOAST
+                showToast("Expense saved successfully!", "success");
+
                 document.getElementById("expenseForm").reset();
-                // Reset date to today after successful submission
                 document.getElementById('date').value = new Date().toISOString().split('T')[0];
             } else {
-                alert("Failed to save expense. Please try again.");
+                // REPLACED ALERT WITH TOAST
+                showToast("Failed to save expense.", "error");
             }
         })
         .catch(error => {
-            alert("An error occurred. Please try again.");
+            // REPLACED ALERT WITH TOAST
+            showToast("An error occurred. Please try again.", "error");
         });
     });
 </script>
